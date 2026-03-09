@@ -1,8 +1,9 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { toast } from "sonner";
 import { ArrowRight, ChevronDown, CheckCircle2, Star, Lock, X } from "lucide-react";
+import { usePostHog } from "posthog-js/react";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -640,6 +641,58 @@ function WaitlistForm({ onSuccess }: { onSuccess: () => void }) {
   const [submitted, setSubmitted] = useState(false);
   const [savedToDb, setSavedToDb] = useState(false);
   const formLoadedAt = useRef(Date.now());
+  const posthog = usePostHog();
+  const formStarted = useRef(false);
+  const formRef = useRef(form); // always up-to-date snapshot for pagehide
+
+  // Keep ref in sync so pagehide always has latest values
+  useEffect(() => { formRef.current = form; }, [form]);
+
+  // Send abandonment event when user leaves with partially filled form
+  useEffect(() => {
+    const handleLeave = () => {
+      const f = formRef.current;
+      const filledFields = Object.entries(f)
+        .filter(([, v]) => v.trim?.() || v)
+        .map(([k]) => k);
+      if (filledFields.length === 0 || submitted) return;
+
+      const partial = {
+        filled_fields: filledFields,
+        // Capture what they entered — email + handles are useful for follow-up
+        email: f.email || null,
+        instagramHandle: f.instagramHandle || null,
+        tiktokHandle: f.tiktokHandle || null,
+        followers: f.followers || null,
+        category: f.category || null,
+        // Never capture full name alone — attach only when email present
+        fullName: f.email ? (f.fullName || null) : null,
+      };
+
+      posthog?.capture("form_abandoned", partial);
+
+      // Also send via beacon so it survives page close
+      if (navigator.sendBeacon) {
+        navigator.sendBeacon(
+          "/api/analytics",
+          JSON.stringify({ event: "form_abandoned", ...partial })
+        );
+      }
+    };
+
+    window.addEventListener("pagehide", handleLeave);
+    return () => window.removeEventListener("pagehide", handleLeave);
+  }, [posthog, submitted]);
+
+  // Update form state + track per-field analytics
+  const updateField = (field: keyof FormData, value: string) => {
+    if (!formStarted.current) {
+      posthog?.capture("form_started");
+      formStarted.current = true;
+    }
+    setForm((prev) => ({ ...prev, [field]: value }));
+    if (value) posthog?.capture("form_field_completed", { field });
+  };
 
   const validate2 = (): boolean => {
     const e: FormErrors = {};
@@ -671,6 +724,11 @@ function WaitlistForm({ onSuccess }: { onSuccess: () => void }) {
       const data = await res.json();
       if (!res.ok || !data.success) throw new Error(data.error || "Something went wrong.");
       setSavedToDb(data.saved === true);
+      posthog?.capture("form_submitted", {
+        saved_to_db: data.saved === true,
+        followers: form.followers,
+        category: form.category,
+      });
       setSubmitted(true);
       setForm({ fullName: "", email: "", instagramHandle: "", tiktokHandle: "", followers: "", category: "" });
       onSuccess();
@@ -822,7 +880,7 @@ function WaitlistForm({ onSuccess }: { onSuccess: () => void }) {
             type="text"
             placeholder="Your full name"
             value={form.fullName}
-            onChange={(e) => setForm({ ...form, fullName: e.target.value })}
+            onChange={(e) => updateField("fullName", e.target.value)}
             className="input-field"
             style={{ ...inputStyle, borderColor: errors.fullName ? "#EF4444" : "rgba(255,255,255,0.1)" }}
           />
@@ -835,7 +893,7 @@ function WaitlistForm({ onSuccess }: { onSuccess: () => void }) {
             type="email"
             placeholder="you@example.com"
             value={form.email}
-            onChange={(e) => setForm({ ...form, email: e.target.value })}
+            onChange={(e) => updateField("email", e.target.value)}
             className="input-field"
             style={{ ...inputStyle, borderColor: errors.email ? "#EF4444" : "rgba(255,255,255,0.1)" }}
           />
@@ -862,7 +920,7 @@ function WaitlistForm({ onSuccess }: { onSuccess: () => void }) {
               type="text"
               placeholder="yourhandle"
               value={form.instagramHandle.replace(/^@/, "")}
-              onChange={(e) => setForm({ ...form, instagramHandle: e.target.value.replace(/^@/, "") })}
+              onChange={(e) => updateField("instagramHandle", e.target.value.replace(/^@/, ""))}
               className="input-field"
               style={{
                 ...inputStyle,
@@ -894,7 +952,7 @@ function WaitlistForm({ onSuccess }: { onSuccess: () => void }) {
               type="text"
               placeholder="yourtiktok"
               value={form.tiktokHandle.replace(/^@/, "")}
-              onChange={(e) => setForm({ ...form, tiktokHandle: e.target.value.replace(/^@/, "") })}
+              onChange={(e) => updateField("tiktokHandle", e.target.value.replace(/^@/, ""))}
               className="input-field"
               style={{ ...inputStyle, paddingLeft: "30px" }}
             />
@@ -905,7 +963,7 @@ function WaitlistForm({ onSuccess }: { onSuccess: () => void }) {
           <label style={labelStyle}>Follower Count</label>
           <select
             value={form.followers}
-            onChange={(e) => setForm({ ...form, followers: e.target.value })}
+            onChange={(e) => updateField("followers", e.target.value)}
             className="input-field"
             style={{
               ...inputStyle,
@@ -930,7 +988,7 @@ function WaitlistForm({ onSuccess }: { onSuccess: () => void }) {
           <label style={labelStyle}>Category</label>
           <select
             value={form.category}
-            onChange={(e) => setForm({ ...form, category: e.target.value })}
+            onChange={(e) => updateField("category", e.target.value)}
             className="input-field"
             style={{
               ...inputStyle,
@@ -1181,13 +1239,88 @@ function CookieConsent() {
   );
 }
 
+// ─── Section Analytics Hook ───────────────────────────────────────────────────
+// Tracks how long each section is in view using IntersectionObserver.
+
+function useSectionTracking() {
+  const posthog = usePostHog();
+  const sectionTimers = useRef<Record<string, number>>({});
+
+  const trackSection = useCallback(
+    (sectionId: string, el: Element | null) => {
+      if (!el) return;
+      const observer = new IntersectionObserver(
+        ([entry]) => {
+          if (entry.isIntersecting) {
+            sectionTimers.current[sectionId] = Date.now();
+          } else if (sectionTimers.current[sectionId]) {
+            const seconds = Math.round((Date.now() - sectionTimers.current[sectionId]) / 1000);
+            delete sectionTimers.current[sectionId];
+            if (seconds >= 1) {
+              posthog?.capture("section_viewed", { section: sectionId, seconds_in_view: seconds });
+            }
+          }
+        },
+        { threshold: 0.3 }
+      );
+      observer.observe(el);
+      return () => observer.disconnect();
+    },
+    [posthog]
+  );
+
+  return trackSection;
+}
+
 // ─── Main Page ────────────────────────────────────────────────────────────────
 
 export default function WaitlistPage() {
   const formRef = useRef<HTMLDivElement>(null);
   const [, setFormSuccess] = useState(false);
+  const posthog = usePostHog();
+  const trackSection = useSectionTracking();
+
+  // Section refs for engagement tracking
+  const heroRef = useRef<HTMLElement>(null);
+  const tickerRef = useRef<HTMLDivElement>(null);
+  const howItWorksRef = useRef<HTMLElement>(null);
+  const signupRef = useRef<HTMLElement>(null);
+  const earningsRef = useRef<HTMLElement>(null);
+  const faqRef = useRef<HTMLElement>(null);
+  const ctaRef = useRef<HTMLElement>(null);
+
+  // Track total time on page
+  const pageOpenedAt = useRef(Date.now());
+
+  useEffect(() => {
+    // Track page visit
+    posthog?.capture("landing_page_viewed");
+
+    // Track total time when user leaves
+    const handleLeave = () => {
+      const seconds = Math.round((Date.now() - pageOpenedAt.current) / 1000);
+      posthog?.capture("page_left", { total_seconds: seconds });
+    };
+    window.addEventListener("pagehide", handleLeave);
+    return () => window.removeEventListener("pagehide", handleLeave);
+  }, [posthog]);
+
+  // Wire up section observers after mount
+  useEffect(() => {
+    const cleanups = [
+      trackSection("hero", heroRef.current),
+      trackSection("activity_ticker", tickerRef.current),
+      trackSection("how_it_works", howItWorksRef.current),
+      trackSection("signup_form", signupRef.current),
+      trackSection("earnings_numbers", earningsRef.current),
+      trackSection("faq", faqRef.current),
+      trackSection("final_cta", ctaRef.current),
+    ];
+    return () => cleanups.forEach((c) => c?.());
+  }, [trackSection]);
 
   const scrollToForm = () => {
+    posthog?.capture("cta_clicked", { location: "hero" });
     document.getElementById("waitlist-form")?.scrollIntoView({ behavior: "smooth", block: "center" });
   };
 
@@ -1205,6 +1338,7 @@ export default function WaitlistPage() {
 
       {/* ── Hero ── */}
       <section
+        ref={heroRef}
         style={{
           position: "relative",
           paddingTop: "130px",
@@ -1412,10 +1546,10 @@ export default function WaitlistPage() {
       </section>
 
       {/* ── Activity Ticker ── */}
-      <ActivityTicker />
+      <div ref={tickerRef}><ActivityTicker /></div>
 
       {/* ── How It Works ── */}
-      <section style={{ padding: "100px 0", background: "#0A0A0F" }}>
+      <section ref={howItWorksRef} style={{ padding: "100px 0", background: "#0A0A0F" }}>
         <div style={{ maxWidth: "1100px", margin: "0 auto", padding: "0 24px" }}>
           <p
             style={{
@@ -1536,7 +1670,7 @@ export default function WaitlistPage() {
       </section>
 
       {/* ── Two-column: Form + Benefits ── */}
-      <section style={{ background: "#0D0D14", padding: "100px 0" }}>
+      <section ref={signupRef} style={{ background: "#0D0D14", padding: "100px 0" }}>
         <div
           style={{
             maxWidth: "1100px",
@@ -1646,7 +1780,7 @@ export default function WaitlistPage() {
       </section>
 
       {/* ── Earnings Numbers ── */}
-      <section style={{ background: "#0A0A0F", padding: "100px 0" }}>
+      <section ref={earningsRef} style={{ background: "#0A0A0F", padding: "100px 0" }}>
         <div style={{ maxWidth: "900px", margin: "0 auto", padding: "0 24px" }}>
           <p
             style={{
@@ -1723,7 +1857,7 @@ export default function WaitlistPage() {
       </section>
 
       {/* ── FAQ ── */}
-      <section style={{ background: "#0D0D14", padding: "100px 0" }}>
+      <section ref={faqRef} style={{ background: "#0D0D14", padding: "100px 0" }}>
         <div style={{ maxWidth: "720px", margin: "0 auto", padding: "0 24px" }}>
           <h2
             className="font-outfit"
@@ -1747,7 +1881,7 @@ export default function WaitlistPage() {
       </section>
 
       {/* ── Final CTA ── */}
-      <section style={{ padding: "120px 0", textAlign: "center", position: "relative", overflow: "hidden" }}>
+      <section ref={ctaRef} style={{ padding: "120px 0", textAlign: "center", position: "relative", overflow: "hidden" }}>
         <div
           style={{
             position: "absolute",

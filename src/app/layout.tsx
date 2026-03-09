@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Outfit, Inter } from "next/font/google";
 import { Toaster } from "sonner";
+import { Analytics } from "@vercel/analytics/react";
+import { PHProvider } from "./providers";
 import "./globals.css";
 
 const outfit = Outfit({
@@ -46,16 +48,19 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${outfit.variable} ${inter.variable}`}>
       <body>
-        {children}
-        <Toaster
-          position="top-center"
-          toastOptions={{
-            style: {
-              fontFamily: "var(--font-inter-var), Inter, sans-serif",
-              borderRadius: "12px",
-            },
-          }}
-        />
+        <PHProvider>
+          {children}
+          <Toaster
+            position="top-center"
+            toastOptions={{
+              style: {
+                fontFamily: "var(--font-inter-var), Inter, sans-serif",
+                borderRadius: "12px",
+              },
+            }}
+          />
+        </PHProvider>
+        <Analytics />
       </body>
     </html>
   );
