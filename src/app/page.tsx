@@ -7,13 +7,16 @@ import { ArrowRight, ChevronDown, CheckCircle2, Star, Lock, X } from "lucide-rea
 // ─── Types ────────────────────────────────────────────────────────────────────
 
 interface FormData {
+  fullName: string;
   email: string;
   instagramHandle: string;
+  tiktokHandle: string;
   followers: string;
   category: string;
 }
 
 interface FormErrors {
+  fullName?: string;
   email?: string;
   instagramHandle?: string;
   followers?: string;
@@ -625,8 +628,10 @@ function RequestCardMockup() {
 
 function WaitlistForm({ onSuccess }: { onSuccess: () => void }) {
   const [form, setForm] = useState<FormData>({
+    fullName: "",
     email: "",
     instagramHandle: "",
+    tiktokHandle: "",
     followers: "",
     category: "",
   });
@@ -636,6 +641,7 @@ function WaitlistForm({ onSuccess }: { onSuccess: () => void }) {
 
   const validate2 = (): boolean => {
     const e: FormErrors = {};
+    if (!form.fullName.trim()) e.fullName = "Full name required.";
     if (!form.email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email))
       e.email = "Valid email required.";
     if (!form.instagramHandle.trim()) e.instagramHandle = "Instagram handle required.";
@@ -658,7 +664,7 @@ function WaitlistForm({ onSuccess }: { onSuccess: () => void }) {
       const data = await res.json();
       if (!res.ok || !data.success) throw new Error(data.error || "Something went wrong.");
       setSubmitted(true);
-      setForm({ email: "", instagramHandle: "", followers: "", category: "" });
+      setForm({ fullName: "", email: "", instagramHandle: "", tiktokHandle: "", followers: "", category: "" });
       onSuccess();
       toast.success("You're in. Welcome to Leaky.");
     } catch (err: unknown) {
@@ -781,6 +787,19 @@ function WaitlistForm({ onSuccess }: { onSuccess: () => void }) {
 
       <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
         <div>
+          <label style={labelStyle}>Full Name</label>
+          <input
+            type="text"
+            placeholder="Your full name"
+            value={form.fullName}
+            onChange={(e) => setForm({ ...form, fullName: e.target.value })}
+            className="input-field"
+            style={{ ...inputStyle, borderColor: errors.fullName ? "#EF4444" : "rgba(255,255,255,0.1)" }}
+          />
+          {errors.fullName && <p style={errorStyle}>{errors.fullName}</p>}
+        </div>
+
+        <div>
           <label style={labelStyle}>Email</label>
           <input
             type="email"
@@ -823,6 +842,33 @@ function WaitlistForm({ onSuccess }: { onSuccess: () => void }) {
             />
           </div>
           {errors.instagramHandle && <p style={errorStyle}>{errors.instagramHandle}</p>}
+        </div>
+
+        <div>
+          <label style={labelStyle}>TikTok Handle <span style={{ color: "#334155", fontWeight: "500", textTransform: "none", letterSpacing: 0 }}>(optional)</span></label>
+          <div style={{ position: "relative" }}>
+            <span
+              style={{
+                position: "absolute",
+                left: "14px",
+                top: "50%",
+                transform: "translateY(-50%)",
+                color: "#475569",
+                fontSize: "15px",
+                pointerEvents: "none",
+              }}
+            >
+              @
+            </span>
+            <input
+              type="text"
+              placeholder="yourtiktok"
+              value={form.tiktokHandle.replace(/^@/, "")}
+              onChange={(e) => setForm({ ...form, tiktokHandle: e.target.value.replace(/^@/, "") })}
+              className="input-field"
+              style={{ ...inputStyle, paddingLeft: "30px" }}
+            />
+          </div>
         </div>
 
         <div>

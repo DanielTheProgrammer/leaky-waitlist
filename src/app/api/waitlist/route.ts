@@ -110,9 +110,15 @@ async function getWaitlistCount(): Promise<number> {
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
-    const { email, instagramHandle, followers, category } = body;
+    const { fullName, email, instagramHandle, tiktokHandle, followers, category } = body;
 
     // Validation
+    if (!fullName?.trim()) {
+      return NextResponse.json(
+        { success: false, error: "Please enter your full name." },
+        { status: 400 }
+      );
+    }
     if (!email || !isValidEmail(email)) {
       return NextResponse.json(
         { success: false, error: "Please enter a valid email address." },
@@ -141,6 +147,8 @@ export async function POST(req: NextRequest) {
     const handle = instagramHandle.startsWith("@")
       ? instagramHandle
       : `@${instagramHandle}`;
+
+    const tiktok = tiktokHandle ? (tiktokHandle.startsWith("@") ? tiktokHandle : `@${tiktokHandle}`) : "";
 
     // Fire all async operations (don't block on errors)
     await Promise.allSettled([
