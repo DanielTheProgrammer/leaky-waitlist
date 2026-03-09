@@ -1045,9 +1045,9 @@ export default function WaitlistPage() {
 
   // Creator avatars for hero social proof stack
   const CREATOR_PROOFS = [
-    { img: "https://i.pravatar.cc/40?img=47", earned: "$2,840 this month" },
-    { img: "https://i.pravatar.cc/40?img=25", earned: "$1,290 this week" },
-    { img: "https://i.pravatar.cc/40?img=63", earned: "$420 today" },
+    { img: "https://i.pravatar.cc/40?img=47", earned: "$2,840 on avg / month" },
+    { img: "https://i.pravatar.cc/40?img=25", earned: "$1,290 on avg / week" },
+    { img: "https://i.pravatar.cc/40?img=63", earned: "$420 on avg / day" },
   ];
 
   return (
@@ -1111,19 +1111,21 @@ export default function WaitlistPage() {
               {/* Pill */}
               <div
                 style={{
-                  display: "inline-flex",
+                  display: "flex",
                   alignItems: "center",
+                  justifyContent: "center",
                   gap: "8px",
                   background: "rgba(234,179,8,0.1)",
                   border: "1px solid rgba(234,179,8,0.2)",
                   borderRadius: "100px",
-                  padding: "8px 16px",
+                  padding: "10px 20px",
                   marginBottom: "32px",
+                  width: "fit-content",
                 }}
               >
                 <Lock size={11} color="#EAB308" />
-                <span style={{ fontSize: "12px", fontWeight: "700", color: "#EAB308", letterSpacing: "0.04em" }}>
-                  Invite-only · Limited creator spots
+                <span style={{ fontSize: "13px", fontWeight: "700", color: "#EAB308", letterSpacing: "0.02em" }}>
+                  919/1000 spots claimed · only 80 places left
                 </span>
               </div>
 
@@ -1243,7 +1245,7 @@ export default function WaitlistPage() {
                       animation: "pulse 1.5s infinite",
                     }}
                   />
-                  47 spots remaining this month
+                  80 spots remaining
                 </span>
               </div>
             </div>
@@ -1629,7 +1631,7 @@ export default function WaitlistPage() {
               }}
             />
             <span style={{ fontSize: "12px", fontWeight: "700", color: "#EAB308" }}>
-              47 spots remaining this month
+              80 spots remaining
             </span>
           </div>
 
