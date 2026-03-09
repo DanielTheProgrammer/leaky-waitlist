@@ -23,6 +23,7 @@ interface FormErrors {
 // ─── Data ─────────────────────────────────────────────────────────────────────
 
 const FOLLOWER_OPTIONS = [
+  { value: "2k-10k", label: "2K – 10K" },
   { value: "10k-50k", label: "10K – 50K" },
   { value: "50k-100k", label: "50K – 100K" },
   { value: "100k-500k", label: "100K – 500K" },
@@ -1125,7 +1126,7 @@ export default function WaitlistPage() {
               >
                 <Lock size={11} color="#EAB308" />
                 <span style={{ fontSize: "13px", fontWeight: "700", color: "#EAB308", letterSpacing: "0.02em" }}>
-                  919/1000 spots claimed · only 80 places left
+                  919/1000 spots claimed · 80 left · 2K+ followers only
                 </span>
               </div>
 
@@ -1158,8 +1159,8 @@ export default function WaitlistPage() {
                   maxWidth: "480px",
                 }}
               >
-                Leaky is a closed circle of creators who earn when fans pay for engagement.
-                Story features. Comments. Tags.{" "}
+                Leaky is a closed circle of creators with 2K+ followers who earn when fans
+                pay for engagement. Story features. Comments. Tags.{" "}
                 <strong style={{ color: "white" }}>You approve every request.</strong>
               </p>
 
