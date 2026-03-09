@@ -5,6 +5,13 @@ import { toast } from "sonner";
 import { ArrowRight, ChevronDown, CheckCircle2, Star, Lock, X } from "lucide-react";
 import { usePostHog } from "posthog-js/react";
 
+// fbq is injected globally by the Meta Pixel script in layout.tsx
+declare global {
+  interface Window {
+    fbq?: (...args: unknown[]) => void;
+  }
+}
+
 // ─── Types ────────────────────────────────────────────────────────────────────
 
 interface FormData {
@@ -729,6 +736,8 @@ function WaitlistForm({ onSuccess }: { onSuccess: () => void }) {
         followers: form.followers,
         category: form.category,
       });
+      // Fire Meta Pixel Lead event — only after server confirms success
+      window.fbq?.("track", "Lead");
       setSubmitted(true);
       setForm({ fullName: "", email: "", instagramHandle: "", tiktokHandle: "", followers: "", category: "" });
       onSuccess();
