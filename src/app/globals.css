@@ -1,0 +1,143 @@
+@import "tailwindcss";
+
+@theme {
+  --color-teal: #14B8A6;
+  --color-teal-dark: #0f9488;
+  --color-coral: #FF6B6B;
+  --color-coral-dark: #e85555;
+  --color-cream: #F8F7F4;
+  --color-dark: #0F172A;
+  --color-card: #ffffff;
+  --font-outfit: var(--font-outfit-var), 'Outfit', sans-serif;
+  --font-inter: var(--font-inter-var), 'Inter', sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-inter);
+  background-color: #F8F7F4;
+  color: #0F172A;
+  -webkit-font-smoothing: antialiased;
+}
+
+.font-outfit {
+  font-family: var(--font-outfit);
+}
+
+/* Gradient text utility */
+.text-gradient-teal {
+  background: linear-gradient(135deg, #14B8A6, #06b6d4);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Scroll indicator bounce */
+@keyframes bounce-slow {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(8px); }
+}
+.animate-bounce-slow {
+  animation: bounce-slow 2s ease-in-out infinite;
+}
+
+/* Count-up animation */
+@keyframes fade-up {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.animate-fade-up {
+  animation: fade-up 0.6s ease-out forwards;
+}
+
+/* Staggered fade-up for cards */
+.stagger-1 { animation-delay: 0.1s; }
+.stagger-2 { animation-delay: 0.2s; }
+.stagger-3 { animation-delay: 0.3s; }
+.stagger-4 { animation-delay: 0.4s; }
+
+/* Decorative blob */
+.hero-blob {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  pointer-events: none;
+}
+
+/* FAQ accordion */
+.faq-answer {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.35s ease, padding 0.35s ease;
+}
+.faq-answer.open {
+  max-height: 300px;
+}
+
+/* Benefit card hover */
+.benefit-card {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.benefit-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+}
+
+/* Input focus ring */
+.input-field:focus {
+  outline: none;
+  border-color: #14B8A6;
+  box-shadow: 0 0 0 3px rgba(20, 184, 166, 0.15);
+}
+
+/* Step connector */
+.step-connector {
+  flex: 1;
+  height: 2px;
+  background: repeating-linear-gradient(
+    90deg,
+    #14B8A6 0,
+    #14B8A6 6px,
+    transparent 6px,
+    transparent 12px
+  );
+  margin: 0 8px;
+  margin-top: -24px;
+}
+
+/* Coral button */
+.btn-coral {
+  background: #FF6B6B;
+  color: white;
+  transition: background 0.2s ease, transform 0.15s ease, box-shadow 0.2s ease;
+}
+.btn-coral:hover:not(:disabled) {
+  background: #e85555;
+  transform: translateY(-1px);
+  box-shadow: 0 8px 20px rgba(255, 107, 107, 0.35);
+}
+.btn-coral:active:not(:disabled) {
+  transform: translateY(0);
+}
+.btn-coral:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+/* Teal outline button */
+.btn-teal-outline {
+  border: 2px solid white;
+  color: white;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+.btn-teal-outline:hover {
+  background: white;
+  color: #14B8A6;
+}
