@@ -638,6 +638,7 @@ function WaitlistForm({ onSuccess }: { onSuccess: () => void }) {
   const [errors, setErrors] = useState<FormErrors>({});
   const [loading, setLoading] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  const [savedToDb, setSavedToDb] = useState(false);
   const formLoadedAt = useRef(Date.now());
 
   const validate2 = (): boolean => {
@@ -669,6 +670,7 @@ function WaitlistForm({ onSuccess }: { onSuccess: () => void }) {
       });
       const data = await res.json();
       if (!res.ok || !data.success) throw new Error(data.error || "Something went wrong.");
+      setSavedToDb(data.saved === true);
       setSubmitted(true);
       setForm({ fullName: "", email: "", instagramHandle: "", tiktokHandle: "", followers: "", category: "" });
       onSuccess();
@@ -736,12 +738,31 @@ function WaitlistForm({ onSuccess }: { onSuccess: () => void }) {
         >
           You&apos;re in.
         </h3>
-        <p style={{ color: "#64748B", fontSize: "15px", lineHeight: "1.7", marginBottom: "24px" }}>
-          Your <strong style={{ color: "#EAB308" }}>$100 launch bonus</strong> is locked.
-          We&apos;ll reach out 48h before we open the doors.
+        <p style={{ color: "#64748B", fontSize: "15px", lineHeight: "1.7", marginBottom: "16px" }}>
+          We&apos;ll reach out 48h before we open the doors with your early access link.
         </p>
+        {/* DB confirmation badge */}
+        <div style={{
+          display: "inline-flex",
+          alignItems: "center",
+          gap: "6px",
+          background: savedToDb ? "rgba(20,184,166,0.1)" : "rgba(234,179,8,0.08)",
+          border: `1px solid ${savedToDb ? "rgba(20,184,166,0.25)" : "rgba(234,179,8,0.2)"}`,
+          borderRadius: "10px",
+          padding: "8px 14px",
+          marginBottom: "20px",
+          fontSize: "12px",
+          fontWeight: "600",
+          color: savedToDb ? "#14B8A6" : "#EAB308",
+        }}>
+          {savedToDb ? (
+            <><CheckCircle2 size={13} color="#14B8A6" /> Spot confirmed &amp; saved</>
+          ) : (
+            <><span style={{ fontSize: "13px" }}>⏳</span> Spot reserved — check back after Resend is re-activated</>
+          )}
+        </div>
         <div style={{ display: "flex", gap: "8px", justifyContent: "center", flexWrap: "wrap" }}>
-          {["Early access", "$100 bonus locked", "You approve every request"].map((badge) => (
+          {["Early access", "You approve every request", "Paid every Friday"].map((badge) => (
             <span
               key={badge}
               style={{
@@ -774,12 +795,15 @@ function WaitlistForm({ onSuccess }: { onSuccess: () => void }) {
         top: "100px",
       }}
     >
-      <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "20px" }}>
+      <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "8px" }}>
         <Lock size={14} color="#EAB308" />
         <span style={{ fontSize: "12px", fontWeight: "700", color: "#EAB308", letterSpacing: "0.06em", textTransform: "uppercase" }}>
           Apply for Early Access
         </span>
       </div>
+      <p style={{ fontSize: "12px", color: "#475569", marginBottom: "20px", lineHeight: "1.6" }}>
+        Requires 2,000+ followers · We welcome all niches and sizes
+      </p>
 
       <h3
         className="font-outfit"
@@ -788,7 +812,7 @@ function WaitlistForm({ onSuccess }: { onSuccess: () => void }) {
         Claim your spot
       </h3>
       <p style={{ color: "#64748B", fontSize: "14px", marginBottom: "24px" }}>
-        Join 847 creators already inside. $100 launch bonus included.
+        Join 847 creators already inside.
       </p>
 
       <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
