@@ -3,10 +3,10 @@
 import { useState, useEffect, useRef } from "react";
 import { toast } from "sonner";
 import {
-  DollarSign,
-  TrendingUp,
-  Users,
+  Hand,
   Zap,
+  Globe,
+  Wallet,
   ChevronDown,
   ArrowRight,
   CheckCircle2,
@@ -52,28 +52,55 @@ const CATEGORY_OPTIONS = [
 
 const BENEFITS = [
   {
-    icon: DollarSign,
+    icon: Hand,
     iconBg: "#14B8A6",
-    title: "Passive Income",
-    desc: "Earn $2,000–$5,000/month with minimal effort. Get paid for what you already do.",
+    title: "You Choose Every Request",
+    desc: "Fans send requests with payment amounts. You see them and decide: accept or decline. No obligation. No pressure.",
   },
   {
-    icon: TrendingUp,
-    iconBg: "#06b6d4",
-    title: "Grow Your Following",
-    desc: "More engagement = more followers. Leaky drives real traffic to your profile.",
-  },
-  {
-    icon: Users,
+    icon: Wallet,
     iconBg: "#8B5CF6",
-    title: "Join a Community",
-    desc: "Connect with other creators. Share tips. Celebrate wins together.",
+    title: "Get Paid Instantly",
+    desc: "Accept a request, complete it, get paid. Weekly payouts to your bank account. No waiting.",
   },
   {
     icon: Zap,
     iconBg: "#F97316",
-    title: "No Restrictions",
-    desc: "Works alongside Cameo, OnlyFans, Patreon. You set your own prices.",
+    title: "Zero Setup Required",
+    desc: "No profile to fill. No content to create. Sign up, set prices, start earning. Takes 2 minutes.",
+  },
+  {
+    icon: Globe,
+    iconBg: "#06b6d4",
+    title: "Works Alongside Everything",
+    desc: "Use Leaky with Cameo, OnlyFans, Patreon, or anything else. No exclusivity. No restrictions.",
+  },
+];
+
+const FAN_PAYS = [
+  {
+    type: "Story Feature",
+    range: "$100 – $500",
+    why: "Fan pays you to feature them in your story. It makes them look more connected, more desirable — they show their friends who featured them.",
+    color: "#14B8A6",
+  },
+  {
+    type: "Comment",
+    range: "$50 – $200",
+    why: "Fan pays you to comment on their post. A comment from a popular creator signals they're worth knowing and boosts their credibility.",
+    color: "#8B5CF6",
+  },
+  {
+    type: "Post Tag",
+    range: "$150 – $400",
+    why: "Fan pays you to tag them in your post. Being tagged by a popular creator = social proof their followers see.",
+    color: "#F97316",
+  },
+  {
+    type: "Story Mention",
+    range: "$75 – $250",
+    why: "Fan pays you to mention them in your story. It's like a public endorsement — makes them feel validated and popular.",
+    color: "#06b6d4",
   },
 ];
 
@@ -82,51 +109,229 @@ const STATS = [
     value: "$2,400",
     label: "Average Monthly Earnings",
     sub: "From 50–100 requests/month",
-    gradient: "from-teal-400 to-cyan-400",
   },
   {
     value: "$8,500",
     label: "Highest Earner (30 days)",
     sub: "Model with 500K followers",
-    gradient: "from-violet-400 to-purple-400",
   },
   {
-    value: "5–10 min",
-    label: "Time Per Request",
-    sub: "Story, comment, or tag",
-    gradient: "from-coral to-orange-400",
+    value: "2 min",
+    label: "Time to Set Up",
+    sub: "Sign up, set prices, done",
   },
 ];
 
 const STEPS = [
-  { num: "01", title: "Join", desc: "Sign up and set your prices" },
-  { num: "02", title: "Get Requests", desc: "Fans request stories, comments, tags" },
-  { num: "03", title: "Deliver", desc: "Post/comment/tag them (5–10 min)" },
-  { num: "04", title: "Get Paid", desc: "Keep 75% of earnings" },
+  { num: "1", title: "Sign Up", desc: "Create your account in 2 minutes. No profile to fill." },
+  { num: "2", title: "Set Your Prices", desc: "Decide what you charge for stories, comments, tags." },
+  { num: "3", title: "Receive Requests", desc: "Fans find your profile and send requests with payment." },
+  { num: "4", title: "You Choose", desc: "See each request. Accept the ones you want. Decline the rest." },
+  { num: "5", title: "Get Paid", desc: "Complete it naturally. Money hits your account weekly." },
 ];
 
 const FAQS = [
   {
-    q: "What if I don't have many followers?",
-    a: "No problem! Leaky works for creators with 10K+ followers. Your engagement rate matters more than follower count. Plus, Leaky helps you grow your following over time.",
+    q: "Do I have to accept every request?",
+    a: "No. You see each request with the payment amount and decide. If you don't want to do it, just decline. No penalty, no explanation needed.",
   },
   {
-    q: "Can I use Leaky alongside Cameo or OnlyFans?",
-    a: "Absolutely! No exclusivity required. Leaky is just another revenue stream. Use it alongside whatever else you're doing — there are no restrictions.",
+    q: "What exactly are fans paying for?",
+    a: "They're paying for authentic engagement from you — a comment on their post, a story feature, a tag, a mention. It's social proof. They show their friends they're connected to someone popular. You're just being yourself.",
   },
   {
-    q: "How much can I earn?",
-    a: "It depends on your niche, follower count, and engagement. Most creators make $1,000–$5,000/month. Top creators make $10,000+/month. You set your own prices.",
+    q: "Do I need to fill out a profile?",
+    a: "Nope. Just sign up, set your prices, and start receiving requests. That's it. The whole setup takes about 2 minutes.",
+  },
+  {
+    q: "Is this ethical?",
+    a: "Absolutely. You're not doing anything fake. You're getting paid for genuine engagement. Fans get social proof from someone they admire, you get paid for what you'd naturally do anyway. Win-win.",
+  },
+  {
+    q: "How much can I really earn?",
+    a: "It depends on your follower count and engagement rate. Most creators earn $1,000–$5,000/month. Top creators earn $10,000+/month. It's totally up to you — the more requests you accept, the more you earn.",
   },
   {
     q: "When do I get paid?",
-    a: "We pay weekly via bank transfer. You'll see money in your account within 1–3 business days of a fan confirming a deal is complete.",
-  },
-  {
-    q: "What if I don't deliver a request?",
-    a: "We handle all refunds and disputes. Your job is to deliver quality content. If there's an issue, we take care of the customer — you're protected.",
+    a: "Every Friday, we send your earnings to your bank account. You'll see money within 1–3 business days.",
   },
 ];
+
+// ─── iPhone Animation ────────────────────────────────────────────────────────
+
+const PHONE_EVENTS = [
+  { label: "❤️  Liked their post", amount: "+$65", delay: 0 },
+  { label: "💬  Commented on post", amount: "+$150", delay: 2200 },
+  { label: "📖  Story feature", amount: "+$500", delay: 4400 },
+  { label: "🏷️  Tagged in post", amount: "+$200", delay: 6600 },
+];
+
+function PhoneAnimation() {
+  const [step, setStep] = useState(-1);
+  const [total, setTotal] = useState(0);
+  const totals = [65, 215, 715, 915];
+
+  useEffect(() => {
+    const timers: ReturnType<typeof setTimeout>[] = [];
+    PHONE_EVENTS.forEach((ev, i) => {
+      timers.push(
+        setTimeout(() => {
+          setStep(i);
+          setTotal(totals[i]);
+        }, ev.delay + 800)
+      );
+    });
+    // loop
+    const loopTimer = setTimeout(() => {
+      setStep(-1);
+      setTotal(0);
+      setTimeout(() => setStep(-2), 100); // trigger re-run via key change
+    }, 9600);
+    timers.push(loopTimer);
+    return () => timers.forEach(clearTimeout);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [step === -2]);
+
+  return (
+    <div style={{ position: "relative", display: "inline-block" }}>
+      {/* Phone frame */}
+      <div
+        style={{
+          width: "220px",
+          height: "440px",
+          borderRadius: "36px",
+          background: "#0F172A",
+          border: "6px solid #1E293B",
+          boxShadow: "0 32px 80px rgba(0,0,0,0.35), 0 0 0 1px rgba(255,255,255,0.06)",
+          overflow: "hidden",
+          position: "relative",
+          flexShrink: 0,
+        }}
+      >
+        {/* Status bar */}
+        <div style={{ background: "#0F172A", padding: "12px 20px 8px", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+          <span style={{ fontSize: "11px", fontWeight: "600", color: "white" }}>9:41</span>
+          <div style={{ width: "80px", height: "20px", borderRadius: "10px", background: "#1E293B" }} />
+          <span style={{ fontSize: "11px", color: "white" }}>●●●</span>
+        </div>
+
+        {/* Instagram-like header */}
+        <div style={{ background: "white", padding: "10px 16px", display: "flex", alignItems: "center", justifyContent: "space-between", borderBottom: "1px solid #F1F5F9" }}>
+          <span style={{ fontSize: "14px", fontWeight: "800", color: "#0F172A", fontFamily: "serif", fontStyle: "italic" }}>Instagram</span>
+          <div style={{ display: "flex", gap: "8px" }}>
+            <div style={{ width: "18px", height: "18px", borderRadius: "4px", border: "1.5px solid #0F172A" }} />
+            <div style={{ width: "18px", height: "18px", borderRadius: "50%", border: "1.5px solid #0F172A" }} />
+          </div>
+        </div>
+
+        {/* Feed */}
+        <div style={{ background: "white", flex: 1, overflow: "hidden", height: "calc(100% - 90px)" }}>
+          {/* Post 1 */}
+          <div style={{ borderBottom: "1px solid #F1F5F9" }}>
+            <div style={{ padding: "10px 12px", display: "flex", alignItems: "center", gap: "8px" }}>
+              <div style={{ width: "28px", height: "28px", borderRadius: "50%", background: "linear-gradient(135deg, #F97316, #EC4899)" }} />
+              <span style={{ fontSize: "11px", fontWeight: "700", color: "#0F172A" }}>@creator</span>
+            </div>
+            <div style={{ width: "100%", height: "130px", background: "linear-gradient(135deg, #E0F2FE, #BAE6FD, #7DD3FC)" }} />
+            <div style={{ padding: "10px 12px" }}>
+              <div style={{ display: "flex", gap: "12px", marginBottom: "8px" }}>
+                {/* Heart */}
+                <svg width="20" height="20" viewBox="0 0 24 24" fill={step >= 0 ? "#EF4444" : "none"} stroke={step >= 0 ? "#EF4444" : "#0F172A"} strokeWidth="2" style={{ transition: "all 0.3s", transform: step === 0 ? "scale(1.3)" : "scale(1)" }}>
+                  <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
+                </svg>
+                {/* Comment */}
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0F172A" strokeWidth="2">
+                  <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+                </svg>
+              </div>
+              <div style={{ height: "8px", background: "#F1F5F9", borderRadius: "4px", width: "80%", marginBottom: "4px" }} />
+              <div style={{ height: "8px", background: "#F1F5F9", borderRadius: "4px", width: "60%" }} />
+            </div>
+          </div>
+
+          {/* Post 2 */}
+          <div>
+            <div style={{ padding: "10px 12px", display: "flex", alignItems: "center", gap: "8px" }}>
+              <div style={{ width: "28px", height: "28px", borderRadius: "50%", background: "linear-gradient(135deg, #14B8A6, #06b6d4)" }} />
+              <span style={{ fontSize: "11px", fontWeight: "700", color: "#0F172A" }}>@user</span>
+            </div>
+            <div style={{ width: "100%", height: "100px", background: "linear-gradient(135deg, #FEF3C7, #FDE68A, #FCD34D)" }} />
+          </div>
+        </div>
+
+        {/* Money pop overlays */}
+        {PHONE_EVENTS.map((ev, i) => (
+          <div
+            key={i}
+            style={{
+              position: "absolute",
+              left: "50%",
+              top: "50%",
+              transform: "translateX(-50%)",
+              opacity: step === i ? 1 : 0,
+              transition: "opacity 0.3s ease",
+              pointerEvents: "none",
+              zIndex: 10,
+              textAlign: "center",
+              animation: step === i ? "moneyPop 2s ease forwards" : "none",
+            }}
+          >
+            <div
+              style={{
+                background: "linear-gradient(135deg, #14B8A6, #06b6d4)",
+                color: "white",
+                borderRadius: "20px",
+                padding: "8px 16px",
+                fontSize: "20px",
+                fontWeight: "900",
+                fontFamily: "var(--font-outfit)",
+                boxShadow: "0 8px 24px rgba(20,184,166,0.5)",
+                whiteSpace: "nowrap",
+              }}
+            >
+              {ev.amount}
+            </div>
+            <div style={{ fontSize: "10px", color: "white", marginTop: "4px", fontWeight: "600", background: "rgba(0,0,0,0.5)", borderRadius: "8px", padding: "3px 8px" }}>
+              {ev.label}
+            </div>
+          </div>
+        ))}
+
+        {/* Running total */}
+        {total > 0 && (
+          <div
+            style={{
+              position: "absolute",
+              bottom: "12px",
+              left: "50%",
+              transform: "translateX(-50%)",
+              background: "rgba(15,23,42,0.92)",
+              borderRadius: "16px",
+              padding: "8px 16px",
+              zIndex: 20,
+              textAlign: "center",
+              whiteSpace: "nowrap",
+            }}
+          >
+            <div style={{ fontSize: "11px", color: "#94A3B8", fontWeight: "600", marginBottom: "2px" }}>earned today</div>
+            <div style={{ fontSize: "20px", fontWeight: "900", color: "#14B8A6", fontFamily: "var(--font-outfit)", letterSpacing: "-0.02em" }}>
+              ${total.toLocaleString()}
+            </div>
+          </div>
+        )}
+      </div>
+
+      <style>{`
+        @keyframes moneyPop {
+          0% { opacity: 0; transform: translateX(-50%) translateY(0) scale(0.7); }
+          15% { opacity: 1; transform: translateX(-50%) translateY(-10px) scale(1.1); }
+          60% { opacity: 1; transform: translateX(-50%) translateY(-30px) scale(1); }
+          100% { opacity: 0; transform: translateX(-50%) translateY(-60px) scale(0.9); }
+        }
+      `}</style>
+    </div>
+  );
+}
 
 // ─── Components ─────────────────────────────────────────────────────────────
 
@@ -204,7 +409,7 @@ function WaitlistForm({ onSuccess }: { onSuccess: () => void }) {
       setSubmitted(true);
       setForm({ email: "", instagramHandle: "", followers: "", category: "" });
       onSuccess();
-      toast.success("🎉 You're on the waitlist! Check your email for next steps.");
+      toast.success("🎉 You're on the waitlist!");
     } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : "Something went wrong. Please try again.";
       toast.error(msg);
@@ -235,11 +440,7 @@ function WaitlistForm({ onSuccess }: { onSuccess: () => void }) {
     marginBottom: "6px",
   };
 
-  const errorStyle = {
-    fontSize: "12px",
-    color: "#EF4444",
-    marginTop: "4px",
-  };
+  const errorStyle = { fontSize: "12px", color: "#EF4444", marginTop: "4px" };
 
   if (submitted) {
     return (
@@ -270,10 +471,11 @@ function WaitlistForm({ onSuccess }: { onSuccess: () => void }) {
           You&apos;re in! 🎉
         </h3>
         <p style={{ color: "#64748B", fontSize: "15px", lineHeight: "1.7", marginBottom: "24px" }}>
-          Check your email for confirmation. Your <strong style={{ color: "#14B8A6" }}>$100 launch bonus</strong> is locked in.
+          Your <strong style={{ color: "#14B8A6" }}>$100 launch bonus</strong> is locked in.
+          We&apos;ll email you 48h before we go live.
         </p>
         <div style={{ display: "flex", gap: "8px", justifyContent: "center", flexWrap: "wrap" }}>
-          {["Keep 75%", "$100 Bonus", "Early Access"].map((badge) => (
+          {["You Choose", "$100 Bonus", "Early Access"].map((badge) => (
             <span
               key={badge}
               style={{
@@ -317,7 +519,6 @@ function WaitlistForm({ onSuccess }: { onSuccess: () => void }) {
       </p>
 
       <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
-        {/* Email */}
         <div>
           <label style={labelStyle}>Email Address</label>
           <input
@@ -331,7 +532,6 @@ function WaitlistForm({ onSuccess }: { onSuccess: () => void }) {
           {errors.email && <p style={errorStyle}>{errors.email}</p>}
         </div>
 
-        {/* Instagram Handle */}
         <div>
           <label style={labelStyle}>Instagram Handle</label>
           <div style={{ position: "relative" }}>
@@ -367,7 +567,6 @@ function WaitlistForm({ onSuccess }: { onSuccess: () => void }) {
           {errors.instagramHandle && <p style={errorStyle}>{errors.instagramHandle}</p>}
         </div>
 
-        {/* Followers */}
         <div>
           <label style={labelStyle}>Follower Count</label>
           <select
@@ -387,15 +586,12 @@ function WaitlistForm({ onSuccess }: { onSuccess: () => void }) {
           >
             <option value="">Select follower count…</option>
             {FOLLOWER_OPTIONS.map((o) => (
-              <option key={o.value} value={o.value}>
-                {o.label}
-              </option>
+              <option key={o.value} value={o.value}>{o.label}</option>
             ))}
           </select>
           {errors.followers && <p style={errorStyle}>{errors.followers}</p>}
         </div>
 
-        {/* Category */}
         <div>
           <label style={labelStyle}>Your Category</label>
           <select
@@ -415,15 +611,12 @@ function WaitlistForm({ onSuccess }: { onSuccess: () => void }) {
           >
             <option value="">Select your niche…</option>
             {CATEGORY_OPTIONS.map((o) => (
-              <option key={o.value} value={o.value}>
-                {o.label}
-              </option>
+              <option key={o.value} value={o.value}>{o.label}</option>
             ))}
           </select>
           {errors.category && <p style={errorStyle}>{errors.category}</p>}
         </div>
 
-        {/* Submit */}
         <button
           type="submit"
           disabled={loading}
@@ -468,9 +661,7 @@ function WaitlistForm({ onSuccess }: { onSuccess: () => void }) {
         </div>
       </div>
 
-      <style>{`
-        @keyframes spin { to { transform: rotate(360deg); } }
-      `}</style>
+      <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
     </div>
   );
 }
@@ -534,7 +725,7 @@ function FAQItem({ q, a }: { q: string; a: string }) {
 
 export default function WaitlistPage() {
   const formRef = useRef<HTMLDivElement>(null);
-  const [formSuccess, setFormSuccess] = useState(false);
+  const [, setFormSuccess] = useState(false);
 
   const scrollToForm = () => {
     document.getElementById("waitlist-form")?.scrollIntoView({ behavior: "smooth", block: "center" });
@@ -548,125 +739,111 @@ export default function WaitlistPage() {
       <section
         style={{
           position: "relative",
-          paddingTop: "140px",
-          paddingBottom: "100px",
+          paddingTop: "120px",
+          paddingBottom: "80px",
           overflow: "hidden",
           background: "#F8F7F4",
         }}
       >
         {/* Decorative blobs */}
-        <div
-          className="hero-blob"
-          style={{
-            width: "500px",
-            height: "500px",
-            background: "rgba(20, 184, 166, 0.12)",
-            top: "-100px",
-            right: "-100px",
-          }}
-        />
-        <div
-          className="hero-blob"
-          style={{
-            width: "300px",
-            height: "300px",
-            background: "rgba(255, 107, 107, 0.08)",
-            bottom: "0",
-            left: "5%",
-          }}
-        />
+        <div className="hero-blob" style={{ width: "500px", height: "500px", background: "rgba(20, 184, 166, 0.10)", top: "-100px", right: "-100px" }} />
+        <div className="hero-blob" style={{ width: "300px", height: "300px", background: "rgba(139, 92, 246, 0.07)", bottom: "0", left: "5%" }} />
 
-        <div className="max-w-5xl mx-auto px-6 text-center" style={{ position: "relative", zIndex: 1 }}>
-          {/* Pill */}
-          <div style={{ display: "inline-flex", alignItems: "center", gap: "8px", background: "#F0FDF9", border: "1px solid #CCFBF1", borderRadius: "100px", padding: "8px 16px", marginBottom: "28px" }}>
-            <span style={{ width: "8px", height: "8px", borderRadius: "50%", background: "#14B8A6", display: "inline-block", animation: "pulse 2s infinite" }} />
-            <span style={{ fontSize: "13px", fontWeight: "600", color: "#0F766E" }}>Early access — limited spots</span>
-          </div>
-
-          {/* Headline */}
-          <h1
-            className="font-outfit"
+        <div className="max-w-6xl mx-auto px-6" style={{ position: "relative", zIndex: 1 }}>
+          <div
             style={{
-              fontSize: "clamp(40px, 7vw, 76px)",
-              fontWeight: "900",
-              color: "#0F172A",
-              lineHeight: "1.05",
-              letterSpacing: "-0.03em",
-              marginBottom: "24px",
-              maxWidth: "820px",
-              margin: "0 auto 24px",
+              display: "grid",
+              gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
+              gap: "60px",
+              alignItems: "center",
             }}
           >
-            Earn{" "}
-            <span className="text-gradient-teal">$2,000–$5,000</span>
-            <br />
-            /month From Your Followers
-          </h1>
+            {/* Left: Copy */}
+            <div>
+              {/* Pill */}
+              <div style={{ display: "inline-flex", alignItems: "center", gap: "8px", background: "#F0FDF9", border: "1px solid #CCFBF1", borderRadius: "100px", padding: "8px 16px", marginBottom: "28px" }}>
+                <span style={{ width: "8px", height: "8px", borderRadius: "50%", background: "#14B8A6", display: "inline-block", animation: "pulse 2s infinite" }} />
+                <span style={{ fontSize: "13px", fontWeight: "600", color: "#0F766E" }}>Early access — limited spots</span>
+              </div>
 
-          {/* Sub */}
-          <p
-            style={{
-              fontSize: "clamp(16px, 2vw, 20px)",
-              color: "#475569",
-              lineHeight: "1.7",
-              maxWidth: "600px",
-              margin: "0 auto 36px",
-            }}
-          >
-            Join Leaky and get paid when fans request stories, comments, tags, and more.
-            No exclusivity. No restrictions. Keep 75% of earnings.
-          </p>
-
-          {/* Trust badges */}
-          <div style={{ display: "flex", justifyContent: "center", gap: "12px", flexWrap: "wrap", marginBottom: "44px" }}>
-            {["Keep 75% of earnings", "No Exclusivity", "$100 Launch Bonus"].map((badge) => (
-              <span
-                key={badge}
+              {/* Headline */}
+              <h1
+                className="font-outfit"
                 style={{
-                  background: "white",
-                  border: "1.5px solid #E2E8F0",
-                  borderRadius: "100px",
-                  padding: "10px 20px",
-                  fontSize: "14px",
-                  fontWeight: "600",
+                  fontSize: "clamp(36px, 6vw, 64px)",
+                  fontWeight: "900",
                   color: "#0F172A",
-                  boxShadow: "0 2px 8px rgba(0,0,0,0.04)",
+                  lineHeight: "1.05",
+                  letterSpacing: "-0.03em",
+                  marginBottom: "24px",
                 }}
               >
-                ✦ {badge}
-              </span>
-            ))}
-          </div>
+                Get Paid for{" "}
+                <span className="text-gradient-teal">What You Already Do</span>
+              </h1>
 
-          {/* CTA */}
-          <button
-            onClick={scrollToForm}
-            className="btn-coral font-outfit"
-            style={{
-              padding: "18px 40px",
-              borderRadius: "16px",
-              fontSize: "17px",
-              fontWeight: "700",
-              border: "none",
-              cursor: "pointer",
-              display: "inline-flex",
-              alignItems: "center",
-              gap: "10px",
-              letterSpacing: "-0.01em",
-            }}
-          >
-            Join Waitlist + Get $100 Bonus
-            <ArrowRight size={20} />
-          </button>
+              {/* Sub */}
+              <p
+                style={{
+                  fontSize: "clamp(16px, 2vw, 19px)",
+                  color: "#475569",
+                  lineHeight: "1.75",
+                  marginBottom: "36px",
+                  maxWidth: "520px",
+                }}
+              >
+                Fans pay to be featured in your stories, comments, and posts.
+                You choose which requests to accept.{" "}
+                <strong style={{ color: "#0F172A" }}>You keep all the earnings.</strong>
+              </p>
 
-          {/* Scroll cue */}
-          <div style={{ marginTop: "60px" }}>
-            <ChevronDown
-              size={28}
-              color="#CBD5E1"
-              className="animate-bounce-slow"
-              style={{ margin: "0 auto", display: "block" }}
-            />
+              {/* Trust badges */}
+              <div style={{ display: "flex", flexWrap: "wrap", gap: "10px", marginBottom: "40px" }}>
+                {["No profile to fill", "Choose every request", "Get paid instantly"].map((badge) => (
+                  <span
+                    key={badge}
+                    style={{
+                      background: "white",
+                      border: "1.5px solid #E2E8F0",
+                      borderRadius: "100px",
+                      padding: "9px 18px",
+                      fontSize: "13px",
+                      fontWeight: "600",
+                      color: "#0F172A",
+                      boxShadow: "0 2px 8px rgba(0,0,0,0.04)",
+                    }}
+                  >
+                    ✓ {badge}
+                  </span>
+                ))}
+              </div>
+
+              {/* CTA */}
+              <button
+                onClick={scrollToForm}
+                className="btn-coral font-outfit"
+                style={{
+                  padding: "18px 40px",
+                  borderRadius: "16px",
+                  fontSize: "17px",
+                  fontWeight: "700",
+                  border: "none",
+                  cursor: "pointer",
+                  display: "inline-flex",
+                  alignItems: "center",
+                  gap: "10px",
+                  letterSpacing: "-0.01em",
+                }}
+              >
+                Join Waitlist + Get $100 Bonus
+                <ArrowRight size={20} />
+              </button>
+            </div>
+
+            {/* Right: Phone animation */}
+            <div style={{ display: "flex", justifyContent: "center" }}>
+              <PhoneAnimation />
+            </div>
           </div>
         </div>
 
@@ -678,8 +855,88 @@ export default function WaitlistPage() {
         `}</style>
       </section>
 
+      {/* ── What fans pay for ── */}
+      <section style={{ background: "white", padding: "100px 0" }}>
+        <div className="max-w-5xl mx-auto px-6">
+          <p style={{ fontSize: "13px", fontWeight: "600", color: "#14B8A6", textTransform: "uppercase", letterSpacing: "0.15em", textAlign: "center", marginBottom: "16px" }}>
+            The Mechanic
+          </p>
+          <h2
+            className="font-outfit"
+            style={{ fontSize: "clamp(28px, 4vw, 42px)", fontWeight: "800", color: "#0F172A", textAlign: "center", marginBottom: "16px", letterSpacing: "-0.02em" }}
+          >
+            Fans Pay for Social Proof. You Earn for Being You.
+          </h2>
+          <p style={{ fontSize: "17px", color: "#64748B", textAlign: "center", maxWidth: "560px", margin: "0 auto 56px", lineHeight: "1.7" }}>
+            Fans use Leaky to buy authentic engagement from creators they admire. Here&apos;s what they&apos;re paying for.
+          </p>
+          <div
+            style={{
+              display: "grid",
+              gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))",
+              gap: "20px",
+            }}
+          >
+            {FAN_PAYS.map((item) => (
+              <div
+                key={item.type}
+                style={{
+                  background: "#F8F7F4",
+                  borderRadius: "20px",
+                  padding: "28px 24px",
+                  border: "1.5px solid #F1F5F9",
+                  transition: "transform 0.2s, box-shadow 0.2s",
+                }}
+                className="benefit-card"
+              >
+                <div
+                  style={{
+                    display: "inline-block",
+                    background: item.color,
+                    color: "white",
+                    borderRadius: "10px",
+                    padding: "6px 14px",
+                    fontSize: "12px",
+                    fontWeight: "700",
+                    letterSpacing: "0.05em",
+                    textTransform: "uppercase",
+                    marginBottom: "12px",
+                  }}
+                >
+                  {item.type}
+                </div>
+                <div
+                  className="font-outfit"
+                  style={{ fontSize: "22px", fontWeight: "900", color: "#0F172A", marginBottom: "12px", letterSpacing: "-0.02em" }}
+                >
+                  {item.range}
+                </div>
+                <p style={{ fontSize: "13px", color: "#64748B", lineHeight: "1.7", margin: 0 }}>
+                  {item.why}
+                </p>
+              </div>
+            ))}
+          </div>
+          <div
+            style={{
+              marginTop: "40px",
+              background: "#F0FDF9",
+              border: "1.5px solid #CCFBF1",
+              borderRadius: "16px",
+              padding: "20px 28px",
+              textAlign: "center",
+            }}
+          >
+            <p style={{ fontSize: "15px", color: "#0F766E", fontWeight: "600", margin: 0 }}>
+              💡 Fans aren&apos;t paying for something fake. They&apos;re paying for authentic engagement from someone they admire.
+              <strong> You&apos;re just being yourself.</strong>
+            </p>
+          </div>
+        </div>
+      </section>
+
       {/* ── Main Two-Column ── */}
-      <section style={{ background: "#F8F7F4", paddingBottom: "100px" }}>
+      <section style={{ background: "#F8F7F4", paddingTop: "100px", paddingBottom: "100px" }}>
         <div
           className="max-w-6xl mx-auto px-6"
           style={{
@@ -702,12 +959,15 @@ export default function WaitlistPage() {
                 fontSize: "32px",
                 fontWeight: "800",
                 color: "#0F172A",
-                marginBottom: "28px",
+                marginBottom: "8px",
                 letterSpacing: "-0.02em",
               }}
             >
-              Why Join Leaky?
+              You Choose. You Earn.
             </h2>
+            <p style={{ fontSize: "15px", color: "#64748B", marginBottom: "28px", lineHeight: "1.6" }}>
+              It&apos;s not work. It&apos;s getting paid for what you already do.
+            </p>
             <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
               {BENEFITS.map((b) => {
                 const Icon = b.icon;
@@ -771,13 +1031,7 @@ export default function WaitlistPage() {
           >
             What Early Creators Are Making
           </h2>
-          <div
-            style={{
-              display: "grid",
-              gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))",
-              gap: "24px",
-            }}
-          >
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))", gap: "24px" }}>
             {STATS.map((s) => (
               <div
                 key={s.label}
@@ -804,9 +1058,7 @@ export default function WaitlistPage() {
                 >
                   {s.value}
                 </div>
-                <p style={{ fontSize: "16px", fontWeight: "600", color: "white", marginBottom: "8px" }}>
-                  {s.label}
-                </p>
+                <p style={{ fontSize: "16px", fontWeight: "600", color: "white", marginBottom: "8px" }}>{s.label}</p>
                 <p style={{ fontSize: "13px", color: "#64748B" }}>{s.sub}</p>
               </div>
             ))}
@@ -822,15 +1074,17 @@ export default function WaitlistPage() {
           </p>
           <h2
             className="font-outfit"
-            style={{ fontSize: "clamp(28px, 4vw, 42px)", fontWeight: "800", color: "#0F172A", textAlign: "center", marginBottom: "64px", letterSpacing: "-0.02em" }}
+            style={{ fontSize: "clamp(28px, 4vw, 42px)", fontWeight: "800", color: "#0F172A", textAlign: "center", marginBottom: "16px", letterSpacing: "-0.02em" }}
           >
             How It Works
           </h2>
+          <p style={{ fontSize: "17px", color: "#64748B", textAlign: "center", marginBottom: "64px" }}>
+            Zero friction. Zero setup. Just money.
+          </p>
 
-          {/* Desktop steps with connectors */}
-          <div style={{ display: "flex", alignItems: "flex-start", gap: "0" }}>
+          <div style={{ display: "flex", alignItems: "flex-start", gap: "0", flexWrap: "wrap" }}>
             {STEPS.map((step, i) => (
-              <div key={step.num} style={{ display: "flex", alignItems: "flex-start", flex: 1, minWidth: 0 }}>
+              <div key={step.num} style={{ display: "flex", alignItems: "flex-start", flex: "1 1 140px", minWidth: 0 }}>
                 <div style={{ flex: 1, textAlign: "center", padding: "0 8px" }}>
                   <div
                     className="font-outfit"
@@ -849,19 +1103,16 @@ export default function WaitlistPage() {
                       boxShadow: "0 8px 20px rgba(20,184,166,0.3)",
                     }}
                   >
-                    {i + 1}
+                    {step.num}
                   </div>
-                  <h3
-                    className="font-outfit"
-                    style={{ fontSize: "18px", fontWeight: "700", color: "#0F172A", marginBottom: "10px" }}
-                  >
+                  <h3 className="font-outfit" style={{ fontSize: "16px", fontWeight: "700", color: "#0F172A", marginBottom: "8px" }}>
                     {step.title}
                   </h3>
-                  <p style={{ fontSize: "14px", color: "#64748B", lineHeight: "1.7" }}>{step.desc}</p>
+                  <p style={{ fontSize: "13px", color: "#64748B", lineHeight: "1.6" }}>{step.desc}</p>
                 </div>
                 {i < STEPS.length - 1 && (
                   <div style={{ display: "flex", alignItems: "center", paddingTop: "24px", flexShrink: 0 }}>
-                    <ArrowRight size={20} color="#CBD5E1" />
+                    <ArrowRight size={18} color="#CBD5E1" />
                   </div>
                 )}
               </div>
@@ -906,12 +1157,11 @@ export default function WaitlistPage() {
             Ready to Start Earning?
           </h2>
           <p style={{ fontSize: "18px", color: "rgba(255,255,255,0.85)", marginBottom: "40px", lineHeight: "1.7" }}>
-            Join <strong>847+</strong> creators on the Leaky waitlist.
-            <br />Get $100 bonus when we launch.
+            Join <strong>847+</strong> creators already on the Leaky waitlist.
+            <br />Get your $100 bonus when we launch.
           </p>
           <button
             onClick={scrollToForm}
-            className="btn-teal-outline font-outfit"
             style={{
               padding: "18px 44px",
               borderRadius: "16px",
@@ -927,20 +1177,13 @@ export default function WaitlistPage() {
               border: "2px solid white",
               transition: "all 0.2s ease",
             }}
-            onMouseEnter={(e) => {
-              (e.target as HTMLButtonElement).style.background = "transparent";
-              (e.target as HTMLButtonElement).style.color = "white";
-            }}
-            onMouseLeave={(e) => {
-              (e.target as HTMLButtonElement).style.background = "white";
-              (e.target as HTMLButtonElement).style.color = "#14B8A6";
-            }}
+            className="font-outfit"
           >
             Join Waitlist Now
             <ArrowRight size={20} />
           </button>
           <p style={{ marginTop: "20px", fontSize: "13px", color: "rgba(255,255,255,0.6)" }}>
-            ✓ Free to join · No credit card required
+            ✓ Free to join · No credit card required · You choose every request
           </p>
         </div>
       </section>
@@ -951,17 +1194,12 @@ export default function WaitlistPage() {
           <span className="font-outfit" style={{ fontSize: "20px", fontWeight: "900", color: "#14B8A6", display: "block", marginBottom: "12px" }}>
             LEAKY
           </span>
-          <p style={{ fontSize: "13px", color: "#475569" }}>
-            © 2026 Leaky. All rights reserved.
-          </p>
+          <p style={{ fontSize: "13px", color: "#475569" }}>© 2026 Leaky. All rights reserved.</p>
           <p style={{ fontSize: "13px", color: "#334155", marginTop: "4px" }}>
-            For creators who want to monetize their influence.
+            Get paid for what you already do.
           </p>
         </div>
       </footer>
-
-      {/* Suppress unused var warning */}
-      {formSuccess && null}
     </div>
   );
 }
