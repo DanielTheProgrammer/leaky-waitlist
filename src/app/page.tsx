@@ -638,6 +638,7 @@ function WaitlistForm({ onSuccess }: { onSuccess: () => void }) {
   const [errors, setErrors] = useState<FormErrors>({});
   const [loading, setLoading] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  const formLoadedAt = useRef(Date.now());
 
   const validate2 = (): boolean => {
     const e: FormErrors = {};
@@ -659,7 +660,12 @@ function WaitlistForm({ onSuccess }: { onSuccess: () => void }) {
       const res = await fetch("/api/waitlist", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(form),
+        body: JSON.stringify({
+          ...form,
+          website: "",   // honeypot — left empty by humans
+          _gotcha: "",   // honeypot — left empty by humans
+          formLoadedAt: formLoadedAt.current,
+        }),
       });
       const data = await res.json();
       if (!res.ok || !data.success) throw new Error(data.error || "Something went wrong.");
@@ -921,6 +927,10 @@ function WaitlistForm({ onSuccess }: { onSuccess: () => void }) {
           {errors.category && <p style={errorStyle}>{errors.category}</p>}
         </div>
 
+        {/* Honeypot fields — hidden from humans, bots fill these */}
+        <input type="text" name="website" style={{ display: "none" }} tabIndex={-1} autoComplete="off" readOnly />
+        <input type="text" name="_gotcha" style={{ display: "none" }} tabIndex={-1} autoComplete="off" readOnly />
+
         <button
           type="submit"
           disabled={loading}
@@ -1080,6 +1090,73 @@ function Navbar({ scrollToForm }: { scrollToForm: () => void }) {
   );
 }
 
+// ─── Cookie Consent ───────────────────────────────────────────────────────────
+
+function CookieConsent() {
+  const [visible, setVisible] = useState(false);
+
+  useEffect(() => {
+    try {
+      if (!localStorage.getItem("leaky_cookie_consent")) setVisible(true);
+    } catch {
+      // localStorage unavailable (private browsing etc.)
+    }
+  }, []);
+
+  const accept = () => {
+    try { localStorage.setItem("leaky_cookie_consent", "accepted"); } catch { /* noop */ }
+    setVisible(false);
+  };
+
+  if (!visible) return null;
+
+  return (
+    <div
+      style={{
+        position: "fixed",
+        bottom: "16px",
+        left: "50%",
+        transform: "translateX(-50%)",
+        zIndex: 1000,
+        width: "calc(100% - 32px)",
+        maxWidth: "620px",
+        background: "#111118",
+        border: "1px solid rgba(255,255,255,0.12)",
+        borderRadius: "16px",
+        padding: "18px 20px",
+        display: "flex",
+        alignItems: "center",
+        gap: "16px",
+        boxShadow: "0 8px 32px rgba(0,0,0,0.5)",
+        flexWrap: "wrap",
+      }}
+    >
+      <p style={{ flex: 1, minWidth: "200px", fontSize: "13px", color: "#94A3B8", margin: 0, lineHeight: "1.6" }}>
+        We use essential cookies to make this site work.{" "}
+        <a href="/privacy" style={{ color: "#14B8A6", textDecoration: "underline" }}>
+          Privacy Policy
+        </a>
+        .
+      </p>
+      <button
+        onClick={accept}
+        className="btn-teal"
+        style={{
+          padding: "9px 20px",
+          borderRadius: "10px",
+          fontSize: "13px",
+          border: "none",
+          cursor: "pointer",
+          flexShrink: 0,
+          whiteSpace: "nowrap",
+        }}
+      >
+        Got it
+      </button>
+    </div>
+  );
+}
+
 // ─── Main Page ────────────────────────────────────────────────────────────────
 
 export default function WaitlistPage() {
@@ -1099,6 +1176,7 @@ export default function WaitlistPage() {
 
   return (
     <div style={{ background: "#0A0A0F", minHeight: "100vh" }}>
+      <CookieConsent />
       <Navbar scrollToForm={scrollToForm} />
 
       {/* ── Hero ── */}
@@ -1746,6 +1824,9 @@ export default function WaitlistPage() {
           <p style={{ fontSize: "12px", color: "#334155" }}>© 2026 Leaky. All rights reserved.</p>
           <p style={{ fontSize: "12px", color: "#1E293B", marginTop: "4px" }}>
             Get paid for what you already do.
+          </p>
+          <p style={{ fontSize: "12px", color: "#334155", marginTop: "12px" }}>
+            <a href="/privacy" style={{ color: "#475569", textDecoration: "underline" }}>Privacy Policy</a>
           </p>
         </div>
       </footer>
