@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { Pool } from "pg";
+import { Client } from "pg";
 
 const LOOPS_API_KEY = process.env.LOOPS_API_KEY || "";
 const ZEPTOMAIL_TOKEN = process.env.ZEPTOMAIL_TOKEN || "";
@@ -12,14 +12,6 @@ const DATABASE_URL = (process.env.DATABASE_URL || "").replace(
   "postgresql://"
 );
 
-let pool: Pool | null = null;
-
-function getPool(): Pool | null {
-  if (!DATABASE_URL) return null;
-  if (!pool) pool = new Pool({ connectionString: DATABASE_URL, ssl: { rejectUnauthorized: false } });
-  return pool;
-}
-
 async function saveToDatabase(
   email: string,
   fullName: string,
@@ -29,23 +21,21 @@ async function saveToDatabase(
   followers: string,
   category: string
 ): Promise<boolean> {
-  const db = getPool();
-  if (!db) return false;
+  if (!DATABASE_URL) return false;
+  const client = new Client({ connectionString: DATABASE_URL, ssl: { rejectUnauthorized: false } });
   try {
-    const client = await db.connect();
-    try {
-      await client.query(
-        `INSERT INTO public.waitlist_signups (email, full_name, first_name, instagram, tiktok, followers, category)
-         VALUES ($1, $2, $3, $4, $5, $6, $7)`,
-        [email, fullName, firstName, instagram, tiktok, followers, category]
-      );
-      return true;
-    } finally {
-      client.release();
-    }
+    await client.connect();
+    const result = await client.query(
+      `INSERT INTO public.waitlist_signups (email, full_name, first_name, instagram, tiktok, followers, category)
+       VALUES ($1, $2, $3, $4, $5, $6, $7)`,
+      [email, fullName, firstName, instagram, tiktok, followers, category]
+    );
+    return (result.rowCount ?? 0) > 0;
   } catch (err) {
     console.error("DB insert failed:", err);
     return false;
+  } finally {
+    await client.end();
   }
 }
 
