@@ -61,7 +61,7 @@ export default function PrivacyPage() {
             <p>When you join the waitlist, we collect:</p>
             <ul style={{ paddingLeft: "20px", marginTop: "12px", display: "flex", flexDirection: "column", gap: "6px" }}>
               <li><strong style={{ color: "white" }}>Full name</strong> — to personalise communications</li>
-              <li><strong style={{ color: "white" }}>Email address</strong> — to notify you before launch and send your $100 bonus confirmation</li>
+              <li><strong style={{ color: "white" }}>Email address</strong> — to notify you before launch and send your early access confirmation</li>
               <li><strong style={{ color: "white" }}>Instagram handle</strong> — to verify eligibility (2K+ followers required)</li>
               <li><strong style={{ color: "white" }}>TikTok handle</strong> (optional) — to understand your audience reach</li>
               <li><strong style={{ color: "white" }}>Follower count range</strong> — to segment the waitlist by creator tier</li>
