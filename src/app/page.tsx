@@ -646,7 +646,6 @@ function WaitlistForm({ onSuccess }: { onSuccess: () => void }) {
   const [errors, setErrors] = useState<FormErrors>({});
   const [loading, setLoading] = useState(false);
   const [submitted, setSubmitted] = useState(false);
-  const [savedToDb, setSavedToDb] = useState(false);
   const formLoadedAt = useRef(Date.now());
   const posthog = usePostHog();
   const formStarted = useRef(false);
@@ -730,7 +729,6 @@ function WaitlistForm({ onSuccess }: { onSuccess: () => void }) {
       });
       const data = await res.json();
       if (!res.ok || !data.success) throw new Error(data.error || "Something went wrong.");
-      setSavedToDb(data.saved === true);
       posthog?.capture("form_submitted", {
         saved_to_db: data.saved === true,
         followers: form.followers,
@@ -805,47 +803,9 @@ function WaitlistForm({ onSuccess }: { onSuccess: () => void }) {
         >
           You&apos;re in.
         </h3>
-        <p style={{ color: "#64748B", fontSize: "15px", lineHeight: "1.7", marginBottom: "16px" }}>
+        <p style={{ color: "#64748B", fontSize: "15px", lineHeight: "1.7" }}>
           We&apos;ll reach out 48h before we open the doors with your early access link.
         </p>
-        {/* DB confirmation badge */}
-        <div style={{
-          display: "inline-flex",
-          alignItems: "center",
-          gap: "6px",
-          background: savedToDb ? "rgba(20,184,166,0.1)" : "rgba(234,179,8,0.08)",
-          border: `1px solid ${savedToDb ? "rgba(20,184,166,0.25)" : "rgba(234,179,8,0.2)"}`,
-          borderRadius: "10px",
-          padding: "8px 14px",
-          marginBottom: "20px",
-          fontSize: "12px",
-          fontWeight: "600",
-          color: savedToDb ? "#14B8A6" : "#EAB308",
-        }}>
-          {savedToDb ? (
-            <><CheckCircle2 size={13} color="#14B8A6" /> Spot confirmed &amp; saved</>
-          ) : (
-            <><span style={{ fontSize: "13px" }}>⏳</span> Spot reserved — check back after Resend is re-activated</>
-          )}
-        </div>
-        <div style={{ display: "flex", gap: "8px", justifyContent: "center", flexWrap: "wrap" }}>
-          {["Early access", "You approve every request", "Paid every Friday"].map((badge) => (
-            <span
-              key={badge}
-              style={{
-                background: "rgba(20,184,166,0.1)",
-                color: "#14B8A6",
-                border: "1px solid rgba(20,184,166,0.2)",
-                borderRadius: "100px",
-                padding: "6px 14px",
-                fontSize: "12px",
-                fontWeight: "600",
-              }}
-            >
-              ✓ {badge}
-            </span>
-          ))}
-        </div>
       </div>
     );
   }
