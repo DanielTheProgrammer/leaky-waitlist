@@ -222,7 +222,7 @@ function PhoneAnimation() {
             fontSize: "15px",
             fontWeight: "900",
             color: "#F0A500",
-            letterSpacing: "-0.02em",
+            letterSpacing: "-0.01em",
           }}
         >
           LEAKY
@@ -531,7 +531,7 @@ function RequestCardMockup() {
               fontSize: "18px",
               fontWeight: "900",
               color: "#F0A500",
-              letterSpacing: "-0.02em",
+              letterSpacing: "-0.01em",
               lineHeight: 1,
             }}
           >
@@ -799,7 +799,7 @@ function WaitlistForm({ onSuccess }: { onSuccess: () => void }) {
         </div>
         <h3
           className="font-syne"
-          style={{ fontSize: "26px", fontWeight: "800", color: "white", marginBottom: "12px", letterSpacing: "-0.02em" }}
+          style={{ fontSize: "26px", fontWeight: "800", color: "white", marginBottom: "12px", letterSpacing: "-0.01em" }}
         >
           You&apos;re in.
         </h3>
@@ -834,7 +834,7 @@ function WaitlistForm({ onSuccess }: { onSuccess: () => void }) {
 
       <h3
         className="font-syne"
-        style={{ fontSize: "22px", fontWeight: "800", color: "white", marginBottom: "6px", letterSpacing: "-0.02em" }}
+        style={{ fontSize: "22px", fontWeight: "800", color: "white", marginBottom: "6px", letterSpacing: "-0.01em" }}
       >
         Claim your spot
       </h3>
@@ -1114,7 +1114,7 @@ function Navbar({ scrollToForm }: { scrollToForm: () => void }) {
       >
         <span
           className="font-syne"
-          style={{ fontSize: "22px", fontWeight: "900", color: "#F0A500", letterSpacing: "-0.02em" }}
+          style={{ fontSize: "22px", fontWeight: "900", color: "#F0A500", letterSpacing: "0.08em" }}
         >
           LEAKY
         </span>
@@ -1388,8 +1388,8 @@ export default function WaitlistPage() {
                   fontSize: "clamp(38px, 5.5vw, 66px)",
                   fontWeight: "900",
                   color: "white",
-                  lineHeight: "1.02",
-                  letterSpacing: "-0.035em",
+                  lineHeight: "1.12",
+                  letterSpacing: "-0.015em",
                   marginBottom: "28px",
                 }}
               >
@@ -1541,7 +1541,7 @@ export default function WaitlistPage() {
               color: "white",
               textAlign: "center",
               marginBottom: "16px",
-              letterSpacing: "-0.03em",
+              letterSpacing: "-0.01em",
             }}
           >
             Fans pay. You{" "}
@@ -1618,7 +1618,7 @@ export default function WaitlistPage() {
                     fontWeight: "800",
                     color: "white",
                     marginBottom: "12px",
-                    letterSpacing: "-0.02em",
+                    letterSpacing: "-0.01em",
                   }}
                 >
                   {step.title}
@@ -1665,7 +1665,7 @@ export default function WaitlistPage() {
                 fontWeight: "900",
                 color: "white",
                 marginBottom: "8px",
-                letterSpacing: "-0.02em",
+                letterSpacing: "-0.01em",
               }}
             >
               Built for creators who value their time.
@@ -1772,7 +1772,7 @@ export default function WaitlistPage() {
               color: "white",
               textAlign: "center",
               marginBottom: "64px",
-              letterSpacing: "-0.03em",
+              letterSpacing: "-0.01em",
             }}
           >
             What creators inside are making.
@@ -1805,7 +1805,7 @@ export default function WaitlistPage() {
                   style={{
                     fontSize: "clamp(44px, 5vw, 60px)",
                     fontWeight: "900",
-                    letterSpacing: "-0.04em",
+                    letterSpacing: "-0.01em",
                     marginBottom: "10px",
                     background: "linear-gradient(135deg, #F0A500, #F0A500)",
                     WebkitBackgroundClip: "text",
@@ -1836,7 +1836,7 @@ export default function WaitlistPage() {
               color: "white",
               textAlign: "center",
               marginBottom: "48px",
-              letterSpacing: "-0.03em",
+              letterSpacing: "-0.01em",
             }}
           >
             Questions?
@@ -1894,8 +1894,8 @@ export default function WaitlistPage() {
               fontWeight: "900",
               color: "white",
               marginBottom: "20px",
-              letterSpacing: "-0.035em",
-              lineHeight: "1.05",
+              letterSpacing: "-0.015em",
+              lineHeight: "1.12",
             }}
           >
             Every day you wait
