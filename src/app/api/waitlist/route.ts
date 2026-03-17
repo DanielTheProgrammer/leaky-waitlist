@@ -1,9 +1,74 @@
 import { NextRequest, NextResponse } from "next/server";
+import { Pool } from "pg";
 
 const LOOPS_API_KEY = process.env.LOOPS_API_KEY || "";
 const ZEPTOMAIL_TOKEN = process.env.ZEPTOMAIL_TOKEN || "";
-const ZEPTOMAIL_FROM = process.env.ZEPTOMAIL_FROM || ""; // e.g. hello@yourdomain.com
+const ZEPTOMAIL_FROM = process.env.ZEPTOMAIL_FROM || "";
 const COUNT_BASE = 847;
+
+// ─── Supabase / Postgres ───────────────────────────────────────────────────────
+const DATABASE_URL = (process.env.DATABASE_URL || "").replace(
+  /^postgresql\+asyncpg:\/\//,
+  "postgresql://"
+);
+
+let pool: Pool | null = null;
+let tableReady = false;
+
+function getPool(): Pool | null {
+  if (!DATABASE_URL) return null;
+  if (!pool) pool = new Pool({ connectionString: DATABASE_URL, ssl: { rejectUnauthorized: false } });
+  return pool;
+}
+
+async function ensureTable(client: import("pg").PoolClient) {
+  if (tableReady) return;
+  await client.query(`
+    CREATE TABLE IF NOT EXISTS waitlist_signups (
+      id            SERIAL PRIMARY KEY,
+      email         TEXT NOT NULL,
+      full_name     TEXT,
+      first_name    TEXT,
+      instagram     TEXT,
+      tiktok        TEXT,
+      followers     TEXT,
+      category      TEXT,
+      created_at    TIMESTAMPTZ NOT NULL DEFAULT NOW()
+    )
+  `);
+  tableReady = true;
+}
+
+async function saveToDatabase(
+  email: string,
+  fullName: string,
+  firstName: string,
+  instagram: string,
+  tiktok: string,
+  followers: string,
+  category: string
+): Promise<boolean> {
+  const db = getPool();
+  if (!db) return false;
+  try {
+    const client = await db.connect();
+    try {
+      await ensureTable(client);
+      await client.query(
+        `INSERT INTO waitlist_signups (email, full_name, first_name, instagram, tiktok, followers, category)
+         VALUES ($1, $2, $3, $4, $5, $6, $7)
+         ON CONFLICT DO NOTHING`,
+        [email, fullName, firstName, instagram, tiktok, followers, category]
+      );
+      return true;
+    } finally {
+      client.release();
+    }
+  } catch (err) {
+    console.error("DB insert failed:", err);
+    return false;
+  }
+}
 
 // ─── In-memory rate limit store ───────────────────────────────────────────────
 const ipStore = new Map<string, { count: number; resetAt: number }>();
@@ -268,12 +333,13 @@ export async function POST(req: NextRequest) {
     const cleanName = sanitize(fullName);
     const firstName = cleanName.split(" ")[0];
 
-    const [saveResult] = await Promise.allSettled([
+    const [dbResult] = await Promise.allSettled([
+      saveToDatabase(sanitize(email), cleanName, firstName, handle, tiktok, followers, category),
       addToLoopsContact(sanitize(email), cleanName, handle, tiktok, followers, category),
       sendConfirmationEmail(sanitize(email), firstName, handle),
     ]);
 
-    const saved = saveResult.status === "fulfilled" && saveResult.value === true;
+    const saved = dbResult.status === "fulfilled" && dbResult.value === true;
     return NextResponse.json({ success: true, saved, count: COUNT_BASE });
   } catch {
     return NextResponse.json(
