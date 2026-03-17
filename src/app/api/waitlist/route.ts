@@ -13,30 +13,11 @@ const DATABASE_URL = (process.env.DATABASE_URL || "").replace(
 );
 
 let pool: Pool | null = null;
-let tableReady = false;
 
 function getPool(): Pool | null {
   if (!DATABASE_URL) return null;
   if (!pool) pool = new Pool({ connectionString: DATABASE_URL, ssl: { rejectUnauthorized: false } });
   return pool;
-}
-
-async function ensureTable(client: import("pg").PoolClient) {
-  if (tableReady) return;
-  await client.query(`
-    CREATE TABLE IF NOT EXISTS public.waitlist_signups (
-      id            SERIAL PRIMARY KEY,
-      email         TEXT NOT NULL,
-      full_name     TEXT,
-      first_name    TEXT,
-      instagram     TEXT,
-      tiktok        TEXT,
-      followers     TEXT,
-      category      TEXT,
-      created_at    TIMESTAMPTZ NOT NULL DEFAULT NOW()
-    )
-  `);
-  tableReady = true;
 }
 
 async function saveToDatabase(
@@ -53,7 +34,6 @@ async function saveToDatabase(
   try {
     const client = await db.connect();
     try {
-      await ensureTable(client);
       await client.query(
         `INSERT INTO public.waitlist_signups (email, full_name, first_name, instagram, tiktok, followers, category)
          VALUES ($1, $2, $3, $4, $5, $6, $7)`,
