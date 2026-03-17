@@ -121,76 +121,89 @@ async function sendConfirmationEmail(
 <head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>You're on the Leaky waitlist</title>
 </head>
-<body style="margin:0;padding:0;background:#0A0A0F;font-family:'Inter',Arial,sans-serif;">
-  <!-- Preheader: invisible text shown in Gmail preview -->
-  <div style="display:none;max-height:0;overflow:hidden;mso-hide:all;">Your spot is confirmed. We'll email you 48 hours before your batch opens.&nbsp;&#847;&nbsp;&#847;&nbsp;&#847;&nbsp;&#847;&nbsp;&#847;&nbsp;&#847;&nbsp;&#847;&nbsp;&#847;&nbsp;&#847;&nbsp;&#847;&nbsp;&#847;&nbsp;&#847;&nbsp;&#847;&nbsp;&#847;&nbsp;&#847;&nbsp;&#847;&nbsp;&#847;&nbsp;&#847;&nbsp;&#847;&nbsp;&#847;&nbsp;&#847;&nbsp;&#847;&nbsp;&#847;&nbsp;&#847;&nbsp;&#847;&nbsp;</div>
-  <table width="100%" cellpadding="0" cellspacing="0" style="padding:48px 16px 64px;">
+<body style="margin:0;padding:0;background:#07070F;font-family:'Epilogue',Arial,sans-serif;">
+  <!-- Preheader -->
+  <div style="display:none;max-height:0;overflow:hidden;mso-hide:all;">Your spot is confirmed. We'll email you 48 hours before your batch opens.&nbsp;&#847;&nbsp;&#847;&nbsp;&#847;&nbsp;&#847;&nbsp;&#847;&nbsp;&#847;&nbsp;&#847;&nbsp;&#847;&nbsp;&#847;&nbsp;&#847;&nbsp;&#847;&nbsp;&#847;&nbsp;&#847;&nbsp;&#847;&nbsp;&#847;&nbsp;&#847;&nbsp;&#847;&nbsp;&#847;&nbsp;&#847;&nbsp;</div>
+  <table width="100%" cellpadding="0" cellspacing="0" style="background:#07070F;padding:48px 16px 64px;">
     <tr><td align="center">
       <table width="560" cellpadding="0" cellspacing="0"
-        style="background:#111118;border-radius:20px;overflow:hidden;max-width:560px;width:100%;border:1px solid rgba(255,255,255,0.08);">
+        style="background:#0D0D1A;border-radius:20px;overflow:hidden;max-width:560px;width:100%;border:1px solid #1A1A2E;">
+
+        <!-- Header -->
         <tr>
-          <td style="padding:32px 40px 28px;text-align:center;border-bottom:1px solid rgba(255,255,255,0.06);">
-            <span style="font-size:28px;font-weight:900;color:#14B8A6;letter-spacing:-0.04em;font-family:Arial,sans-serif;">LEAKY</span>
-            <div style="margin-top:6px;font-size:12px;color:#475569;letter-spacing:0.08em;text-transform:uppercase;">Waitlist Confirmed</div>
+          <td style="padding:32px 40px 28px;text-align:center;border-bottom:1px solid #1A1A2E;">
+            <span style="font-size:26px;font-weight:900;color:#00CDB4;letter-spacing:0.06em;font-family:Arial,sans-serif;text-transform:uppercase;">LEAKY</span>
+            <div style="margin-top:6px;font-size:11px;color:#4A4A6A;letter-spacing:0.12em;text-transform:uppercase;">Waitlist Confirmed</div>
           </td>
         </tr>
+
+        <!-- Body -->
         <tr>
           <td style="padding:40px 40px 0;">
-            <div style="display:inline-block;background:rgba(20,184,166,0.12);border:1px solid rgba(20,184,166,0.3);border-radius:100px;padding:6px 16px;margin-bottom:20px;">
-              <span style="font-size:12px;font-weight:700;color:#14B8A6;letter-spacing:0.06em;text-transform:uppercase;">● Spot secured</span>
+            <div style="display:inline-block;background:rgba(0,205,180,0.10);border:1px solid rgba(0,205,180,0.25);border-radius:100px;padding:6px 16px;margin-bottom:24px;">
+              <span style="font-size:11px;font-weight:700;color:#00CDB4;letter-spacing:0.1em;text-transform:uppercase;">● Spot secured</span>
             </div>
-            <h1 style="margin:0 0 14px;font-size:28px;font-weight:900;color:#FFFFFF;line-height:1.25;letter-spacing:-0.02em;">
+            <h1 style="margin:0 0 16px;font-size:32px;font-weight:900;color:#EDEDFF;line-height:1.2;letter-spacing:-0.01em;font-family:Arial,sans-serif;">
               You're in, ${firstName}.
             </h1>
-            <p style="margin:0;font-size:16px;color:#94A3B8;line-height:1.75;">
+            <p style="margin:0;font-size:16px;color:#7A7A9E;line-height:1.75;">
               Your spot on the Leaky waitlist is confirmed. We're going through applications in batches, so you'll hear from us 48 hours before your batch opens.
             </p>
           </td>
         </tr>
+
+        <!-- What happens next -->
         <tr>
           <td style="padding:28px 40px 0;">
-            <div style="background:rgba(20,184,166,0.07);border:1px solid rgba(20,184,166,0.18);border-radius:14px;padding:24px 28px;">
-              <p style="margin:0 0 16px;font-size:12px;font-weight:700;color:#14B8A6;text-transform:uppercase;letter-spacing:0.1em;">What happens next</p>
+            <div style="background:rgba(0,205,180,0.06);border:1px solid rgba(0,205,180,0.15);border-radius:14px;padding:24px 28px;">
+              <p style="margin:0 0 18px;font-size:11px;font-weight:700;color:#00CDB4;text-transform:uppercase;letter-spacing:0.12em;">What happens next</p>
               <table width="100%" cellpadding="0" cellspacing="0">
-                <tr><td style="padding:8px 0;border-bottom:1px solid rgba(255,255,255,0.05);">
-                  <span style="font-size:14px;color:#14B8A6;font-weight:700;margin-right:12px;">01</span>
-                  <span style="font-size:14px;color:#CBD5E1;">We review your application</span>
+                <tr><td style="padding:10px 0;border-bottom:1px solid #1A1A2E;">
+                  <span style="font-size:13px;color:#00CDB4;font-weight:800;margin-right:14px;font-family:Arial,sans-serif;">01</span>
+                  <span style="font-size:14px;color:#7A7A9E;">We review your application</span>
                 </td></tr>
-                <tr><td style="padding:8px 0;border-bottom:1px solid rgba(255,255,255,0.05);">
-                  <span style="font-size:14px;color:#14B8A6;font-weight:700;margin-right:12px;">02</span>
-                  <span style="font-size:14px;color:#CBD5E1;">You get an email 48h before your batch opens</span>
+                <tr><td style="padding:10px 0;border-bottom:1px solid #1A1A2E;">
+                  <span style="font-size:13px;color:#00CDB4;font-weight:800;margin-right:14px;font-family:Arial,sans-serif;">02</span>
+                  <span style="font-size:14px;color:#7A7A9E;">You get an email 48h before your batch opens</span>
                 </td></tr>
-                <tr><td style="padding:8px 0;">
-                  <span style="font-size:14px;color:#14B8A6;font-weight:700;margin-right:12px;">03</span>
-                  <span style="font-size:14px;color:#CBD5E1;">Set your prices, accept your first request</span>
+                <tr><td style="padding:10px 0;">
+                  <span style="font-size:13px;color:#00CDB4;font-weight:800;margin-right:14px;font-family:Arial,sans-serif;">03</span>
+                  <span style="font-size:14px;color:#7A7A9E;">Set your prices, accept your first request</span>
                 </td></tr>
               </table>
             </div>
           </td>
         </tr>
+
+        <!-- Social proof -->
         <tr>
-          <td style="padding:28px 40px 0;">
-            <p style="margin:0;font-size:14px;color:#64748B;line-height:1.7;">
-              847+ creators are already waiting. We keep batches small so the platform stays high-quality for everyone.
+          <td style="padding:24px 40px 0;">
+            <p style="margin:0;font-size:13px;color:#4A4A6A;line-height:1.7;">
+              847+ creators are already on the list. We keep batches small so the platform stays high-quality for everyone.
             </p>
           </td>
         </tr>
+
+        <!-- CTA -->
         <tr>
           <td style="padding:32px 40px 40px;text-align:center;">
             <a href="https://leaky.buzz"
-              style="display:inline-block;background:#EAB308;color:#0A0A0F;font-size:15px;font-weight:800;text-decoration:none;padding:14px 36px;border-radius:100px;">
+              style="display:inline-block;background:#F0A500;color:#07070F;font-size:15px;font-weight:800;text-decoration:none;padding:14px 40px;border-radius:100px;font-family:Arial,sans-serif;letter-spacing:0.02em;">
               You're on the list
             </a>
           </td>
         </tr>
+
+        <!-- Footer -->
         <tr>
-          <td style="padding:24px 40px;border-top:1px solid rgba(255,255,255,0.06);text-align:center;">
-            <p style="margin:0;font-size:12px;color:#334155;">
+          <td style="padding:24px 40px;border-top:1px solid #1A1A2E;text-align:center;">
+            <p style="margin:0;font-size:12px;color:#4A4A6A;line-height:1.8;">
               © 2026 Leaky · welcome@leaky.buzz<br>
               You received this because ${instagramHandle} joined the waitlist at leaky.buzz.
             </p>
           </td>
         </tr>
+
       </table>
     </td></tr>
   </table>
