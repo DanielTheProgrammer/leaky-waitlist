@@ -1,16 +1,13 @@
 import { NextRequest, NextResponse } from "next/server";
-import { Client } from "pg";
 
 const LOOPS_API_KEY = process.env.LOOPS_API_KEY || "";
 const ZEPTOMAIL_TOKEN = process.env.ZEPTOMAIL_TOKEN || "";
 const ZEPTOMAIL_FROM = process.env.ZEPTOMAIL_FROM || "";
 const COUNT_BASE = 847;
 
-// ─── Supabase / Postgres ───────────────────────────────────────────────────────
-const DATABASE_URL = (process.env.DATABASE_URL || "").replace(
-  /^postgresql\+asyncpg:\/\//,
-  "postgresql://"
-);
+// ─── Supabase REST API ────────────────────────────────────────────────────────
+const SUPABASE_URL = "https://qaykvqiytuaxcecfmpgf.supabase.co";
+const SUPABASE_KEY = process.env.SUPABASE_SERVICE_KEY || "";
 
 async function saveToDatabase(
   email: string,
@@ -21,21 +18,25 @@ async function saveToDatabase(
   followers: string,
   category: string
 ): Promise<boolean> {
-  if (!DATABASE_URL) return false;
-  const client = new Client({ connectionString: DATABASE_URL, ssl: { rejectUnauthorized: false } });
+  if (!SUPABASE_KEY) return false;
   try {
-    await client.connect();
-    const result = await client.query(
-      `INSERT INTO public.waitlist_signups (email, full_name, first_name, instagram, tiktok, followers, category)
-       VALUES ($1, $2, $3, $4, $5, $6, $7)`,
-      [email, fullName, firstName, instagram, tiktok, followers, category]
-    );
-    return (result.rowCount ?? 0) > 0;
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/waitlist_signups`, {
+      method: "POST",
+      headers: {
+        "apikey": SUPABASE_KEY,
+        "Authorization": `Bearer ${SUPABASE_KEY}`,
+        "Content-Type": "application/json",
+        "Prefer": "return=minimal",
+      },
+      body: JSON.stringify({
+        email, full_name: fullName, first_name: firstName,
+        instagram, tiktok, followers, category,
+      }),
+    });
+    return res.status === 201;
   } catch (err) {
     console.error("DB insert failed:", err);
     return false;
-  } finally {
-    await client.end();
   }
 }
 
