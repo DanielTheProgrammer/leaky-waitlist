@@ -24,7 +24,7 @@ function getPool(): Pool | null {
 async function ensureTable(client: import("pg").PoolClient) {
   if (tableReady) return;
   await client.query(`
-    CREATE TABLE IF NOT EXISTS waitlist_signups (
+    CREATE TABLE IF NOT EXISTS public.waitlist_signups (
       id            SERIAL PRIMARY KEY,
       email         TEXT NOT NULL,
       full_name     TEXT,
@@ -55,9 +55,8 @@ async function saveToDatabase(
     try {
       await ensureTable(client);
       await client.query(
-        `INSERT INTO waitlist_signups (email, full_name, first_name, instagram, tiktok, followers, category)
-         VALUES ($1, $2, $3, $4, $5, $6, $7)
-         ON CONFLICT DO NOTHING`,
+        `INSERT INTO public.waitlist_signups (email, full_name, first_name, instagram, tiktok, followers, category)
+         VALUES ($1, $2, $3, $4, $5, $6, $7)`,
         [email, fullName, firstName, instagram, tiktok, followers, category]
       );
       return true;
