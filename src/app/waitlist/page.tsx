@@ -221,7 +221,7 @@ function PhoneAnimation() {
           style={{
             fontSize: "15px",
             fontWeight: "900",
-            color: "#14B8A6",
+            color: "#F0A500",
             letterSpacing: "-0.02em",
           }}
         >
@@ -239,7 +239,7 @@ function PhoneAnimation() {
             style={{
               fontSize: "12px",
               fontWeight: "700",
-              color: totalEarned > 0 ? "#14B8A6" : "#64748B",
+              color: totalEarned > 0 ? "#F0A500" : "#64748B",
               transition: "color 0.4s ease",
             }}
           >
@@ -308,7 +308,7 @@ function PhoneAnimation() {
                       style={{
                         fontSize: "13px",
                         fontWeight: "900",
-                        color: "#14B8A6",
+                        color: "#F0A500",
                         letterSpacing: "-0.01em",
                       }}
                     >
@@ -340,7 +340,7 @@ function PhoneAnimation() {
                   <div
                     style={{
                       flex: 1,
-                      background: "#14B8A6",
+                      background: "#F0A500",
                       borderRadius: "8px",
                       padding: "5px 0",
                       textAlign: "center",
@@ -380,8 +380,8 @@ function PhoneAnimation() {
                     gap: "4px",
                   }}
                 >
-                  <CheckCircle2 size={10} color="#14B8A6" />
-                  <span style={{ fontSize: "9px", color: "#14B8A6", fontWeight: "600" }}>
+                  <CheckCircle2 size={10} color="#F0A500" />
+                  <span style={{ fontSize: "9px", color: "#F0A500", fontWeight: "600" }}>
                     Accepted · {notif.amount} coming Friday
                   </span>
                 </div>
@@ -430,7 +430,7 @@ function ActivityTicker() {
                 width: "6px",
                 height: "6px",
                 borderRadius: "50%",
-                background: "#14B8A6",
+                background: "#F0A500",
                 display: "inline-block",
               }}
             />
@@ -441,7 +441,7 @@ function ActivityTicker() {
               style={{
                 fontSize: "13px",
                 fontWeight: "800",
-                color: "#EAB308",
+                color: "#F0A500",
                 letterSpacing: "-0.01em",
               }}
             >
@@ -530,7 +530,7 @@ function RequestCardMockup() {
             style={{
               fontSize: "18px",
               fontWeight: "900",
-              color: "#14B8A6",
+              color: "#F0A500",
               letterSpacing: "-0.02em",
               lineHeight: 1,
             }}
@@ -566,7 +566,7 @@ function RequestCardMockup() {
         }}
       >
         <span>Story Feature · Expires in 48h</span>
-        <span style={{ color: "#EAB308", fontWeight: "600" }}>$350</span>
+        <span style={{ color: "#F0A500", fontWeight: "600" }}>$350</span>
       </div>
 
       {state === "pending" ? (
@@ -576,7 +576,7 @@ function RequestCardMockup() {
               flex: 1,
               padding: "12px 0",
               borderRadius: "12px",
-              background: "#14B8A6",
+              background: "#F0A500",
               border: "none",
               color: "white",
               fontSize: "14px",
@@ -618,8 +618,8 @@ function RequestCardMockup() {
             animation: "fadeIn 0.4s ease",
           }}
         >
-          <CheckCircle2 size={16} color="#14B8A6" />
-          <span style={{ fontSize: "13px", color: "#14B8A6", fontWeight: "600" }}>
+          <CheckCircle2 size={16} color="#F0A500" />
+          <span style={{ fontSize: "13px", color: "#F0A500", fontWeight: "600" }}>
             Accepted — $350 arrives Friday
           </span>
         </div>
@@ -795,10 +795,10 @@ function WaitlistForm({ onSuccess }: { onSuccess: () => void }) {
             margin: "0 auto 20px",
           }}
         >
-          <CheckCircle2 size={32} color="#14B8A6" />
+          <CheckCircle2 size={32} color="#F0A500" />
         </div>
         <h3
-          className="font-outfit"
+          className="font-syne"
           style={{ fontSize: "26px", fontWeight: "800", color: "white", marginBottom: "12px", letterSpacing: "-0.02em" }}
         >
           You&apos;re in.
@@ -823,8 +823,8 @@ function WaitlistForm({ onSuccess }: { onSuccess: () => void }) {
       }}
     >
       <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "8px" }}>
-        <Lock size={14} color="#EAB308" />
-        <span style={{ fontSize: "12px", fontWeight: "700", color: "#EAB308", letterSpacing: "0.06em", textTransform: "uppercase" }}>
+        <Lock size={14} color="#F0A500" />
+        <span style={{ fontSize: "12px", fontWeight: "700", color: "#F0A500", letterSpacing: "0.06em", textTransform: "uppercase" }}>
           Apply for Early Access
         </span>
       </div>
@@ -833,7 +833,7 @@ function WaitlistForm({ onSuccess }: { onSuccess: () => void }) {
       </p>
 
       <h3
-        className="font-outfit"
+        className="font-syne"
         style={{ fontSize: "22px", fontWeight: "800", color: "white", marginBottom: "6px", letterSpacing: "-0.02em" }}
       >
         Claim your spot
@@ -985,7 +985,7 @@ function WaitlistForm({ onSuccess }: { onSuccess: () => void }) {
         <button
           type="submit"
           disabled={loading}
-          className="btn-gold font-outfit"
+          className="btn-gold font-syne"
           style={{
             padding: "15px 24px",
             borderRadius: "14px",
@@ -1012,7 +1012,7 @@ function WaitlistForm({ onSuccess }: { onSuccess: () => void }) {
       <div style={{ marginTop: "16px", paddingTop: "16px", borderTop: "1px solid rgba(255,255,255,0.06)" }}>
         <div style={{ display: "flex", gap: "4px", marginBottom: "8px" }}>
           {[...Array(5)].map((_, i) => (
-            <Star key={i} size={12} fill="#F59E0B" stroke="none" />
+            <Star key={i} size={12} fill="#F0A500" stroke="none" />
           ))}
         </div>
         <p style={{ fontSize: "12px", color: "#475569" }}>
@@ -1056,14 +1056,14 @@ function FAQItem({ q, a }: { q: string; a: string }) {
         }}
       >
         <span
-          className="font-outfit"
+          className="font-syne"
           style={{ fontSize: "16px", fontWeight: "700", color: "white", lineHeight: "1.4" }}
         >
           {q}
         </span>
         <ChevronDown
           size={18}
-          color={open ? "#14B8A6" : "#475569"}
+          color={open ? "#F0A500" : "#475569"}
           style={{ flexShrink: 0, transition: "transform 0.25s ease", transform: open ? "rotate(180deg)" : "rotate(0deg)" }}
         />
       </button>
@@ -1113,18 +1113,18 @@ function Navbar({ scrollToForm }: { scrollToForm: () => void }) {
         }}
       >
         <span
-          className="font-outfit"
-          style={{ fontSize: "22px", fontWeight: "900", color: "#14B8A6", letterSpacing: "-0.02em" }}
+          className="font-syne"
+          style={{ fontSize: "22px", fontWeight: "900", color: "#F0A500", letterSpacing: "-0.02em" }}
         >
           LEAKY
         </span>
         <div style={{ display: "flex", alignItems: "center", gap: "16px" }}>
           <span style={{ fontSize: "12px", color: "#475569", fontWeight: "600" }}>
-            <span style={{ color: "#14B8A6" }}>●</span> 847 creators inside
+            <span style={{ color: "#F0A500" }}>●</span> 847 creators inside
           </span>
           <button
             onClick={scrollToForm}
-            className="btn-gold font-outfit"
+            className="btn-gold font-syne"
             style={{
               padding: "9px 20px",
               borderRadius: "10px",
@@ -1184,14 +1184,14 @@ function CookieConsent() {
     >
       <p style={{ flex: 1, minWidth: "200px", fontSize: "13px", color: "#94A3B8", margin: 0, lineHeight: "1.6" }}>
         We use essential cookies to make this site work.{" "}
-        <a href="/privacy" style={{ color: "#14B8A6", textDecoration: "underline" }}>
+        <a href="/privacy" style={{ color: "#F0A500", textDecoration: "underline" }}>
           Privacy Policy
         </a>
         .
       </p>
       <button
         onClick={accept}
-        className="btn-teal"
+        className="btn-amber"
         style={{
           padding: "9px 20px",
           borderRadius: "10px",
@@ -1375,15 +1375,15 @@ export default function WaitlistPage() {
                   width: "fit-content",
                 }}
               >
-                <Lock size={11} color="#EAB308" />
-                <span style={{ fontSize: "13px", fontWeight: "700", color: "#EAB308", letterSpacing: "0.02em" }}>
+                <Lock size={11} color="#F0A500" />
+                <span style={{ fontSize: "13px", fontWeight: "700", color: "#F0A500", letterSpacing: "0.02em" }}>
                   919/1000 spots claimed · 80 left · 2K+ followers only
                 </span>
               </div>
 
               {/* Headline */}
               <h1
-                className="font-outfit"
+                className="font-syne"
                 style={{
                   fontSize: "clamp(38px, 5.5vw, 66px)",
                   fontWeight: "900",
@@ -1462,7 +1462,7 @@ export default function WaitlistPage() {
               <div style={{ display: "flex", flexDirection: "column", gap: "12px", alignItems: "flex-start" }}>
                 <button
                   onClick={scrollToForm}
-                  className="btn-gold font-outfit"
+                  className="btn-gold font-syne"
                   style={{
                     padding: "17px 36px",
                     borderRadius: "14px",
@@ -1524,7 +1524,7 @@ export default function WaitlistPage() {
             style={{
               fontSize: "12px",
               fontWeight: "700",
-              color: "#14B8A6",
+              color: "#F0A500",
               textTransform: "uppercase",
               letterSpacing: "0.15em",
               textAlign: "center",
@@ -1534,7 +1534,7 @@ export default function WaitlistPage() {
             How It Works
           </p>
           <h2
-            className="font-outfit"
+            className="font-syne"
             style={{
               fontSize: "clamp(28px, 4vw, 46px)",
               fontWeight: "900",
@@ -1545,7 +1545,7 @@ export default function WaitlistPage() {
             }}
           >
             Fans pay. You{" "}
-            <span className="text-gradient-teal">choose</span>. You earn.
+            <span className="text-gradient-amber">choose</span>. You earn.
           </h2>
           <p
             style={{
@@ -1574,13 +1574,13 @@ export default function WaitlistPage() {
                 num: "01",
                 title: "Fan sends a request",
                 desc: "They find your profile, pick what they want (story feature, comment, tag), and pay upfront. Money is locked in escrow before you even see it.",
-                accent: "#14B8A6",
+                accent: "#F0A500",
               },
               {
                 num: "02",
                 title: "You review it",
                 desc: "You see the request, the amount, and what they want. Accept, decline, or counter with your own price. You're always in control.",
-                accent: "#EAB308",
+                accent: "#F0A500",
               },
               {
                 num: "03",
@@ -1612,7 +1612,7 @@ export default function WaitlistPage() {
                   {step.num}
                 </div>
                 <h3
-                  className="font-outfit"
+                  className="font-syne"
                   style={{
                     fontSize: "20px",
                     fontWeight: "800",
@@ -1659,7 +1659,7 @@ export default function WaitlistPage() {
           {/* Benefits */}
           <div>
             <h2
-              className="font-outfit"
+              className="font-syne"
               style={{
                 fontSize: "clamp(26px, 3vw, 36px)",
                 fontWeight: "900",
@@ -1679,13 +1679,13 @@ export default function WaitlistPage() {
                 {
                   title: "You approve every request",
                   desc: "See the request and amount before committing. Never do something you don't want. Your account, your rules.",
-                  color: "#14B8A6",
+                  color: "#F0A500",
                   icon: "✓",
                 },
                 {
                   title: "No contracts. No exclusivity.",
                   desc: "Use Leaky alongside Cameo, OnlyFans, Patreon, or anything else. Zero restrictions. It's just extra income.",
-                  color: "#EAB308",
+                  color: "#F0A500",
                   icon: "✓",
                 },
                 {
@@ -1734,7 +1734,7 @@ export default function WaitlistPage() {
                   </div>
                   <div>
                     <h3
-                      className="font-outfit"
+                      className="font-syne"
                       style={{ fontSize: "15px", fontWeight: "700", color: "white", marginBottom: "5px" }}
                     >
                       {b.title}
@@ -1755,7 +1755,7 @@ export default function WaitlistPage() {
             style={{
               fontSize: "12px",
               fontWeight: "700",
-              color: "#EAB308",
+              color: "#F0A500",
               textTransform: "uppercase",
               letterSpacing: "0.15em",
               textAlign: "center",
@@ -1765,7 +1765,7 @@ export default function WaitlistPage() {
             Early Access Numbers
           </p>
           <h2
-            className="font-outfit"
+            className="font-syne"
             style={{
               fontSize: "clamp(28px, 4vw, 44px)",
               fontWeight: "900",
@@ -1801,13 +1801,13 @@ export default function WaitlistPage() {
                 }}
               >
                 <div
-                  className="font-outfit"
+                  className="font-syne"
                   style={{
                     fontSize: "clamp(44px, 5vw, 60px)",
                     fontWeight: "900",
                     letterSpacing: "-0.04em",
                     marginBottom: "10px",
-                    background: "linear-gradient(135deg, #EAB308, #F59E0B)",
+                    background: "linear-gradient(135deg, #F0A500, #F0A500)",
                     WebkitBackgroundClip: "text",
                     WebkitTextFillColor: "transparent",
                     backgroundClip: "text",
@@ -1829,7 +1829,7 @@ export default function WaitlistPage() {
       <section ref={faqRef} style={{ background: "#0D0D14", padding: "100px 0" }}>
         <div style={{ maxWidth: "720px", margin: "0 auto", padding: "0 24px" }}>
           <h2
-            className="font-outfit"
+            className="font-syne"
             style={{
               fontSize: "clamp(26px, 3.5vw, 40px)",
               fontWeight: "900",
@@ -1882,13 +1882,13 @@ export default function WaitlistPage() {
                 animation: "pulse 1.5s infinite",
               }}
             />
-            <span style={{ fontSize: "12px", fontWeight: "700", color: "#EAB308" }}>
+            <span style={{ fontSize: "12px", fontWeight: "700", color: "#F0A500" }}>
               80 spots remaining
             </span>
           </div>
 
           <h2
-            className="font-outfit"
+            className="font-syne"
             style={{
               fontSize: "clamp(36px, 5vw, 58px)",
               fontWeight: "900",
@@ -1910,7 +1910,7 @@ export default function WaitlistPage() {
 
           <button
             onClick={scrollToForm}
-            className="btn-gold font-outfit"
+            className="btn-gold font-syne"
             style={{
               padding: "18px 44px",
               borderRadius: "16px",
@@ -1943,8 +1943,8 @@ export default function WaitlistPage() {
       >
         <div style={{ maxWidth: "1100px", margin: "0 auto", padding: "0 24px" }}>
           <span
-            className="font-outfit"
-            style={{ fontSize: "20px", fontWeight: "900", color: "#14B8A6", display: "block", marginBottom: "12px" }}
+            className="font-syne"
+            style={{ fontSize: "20px", fontWeight: "900", color: "#F0A500", display: "block", marginBottom: "12px" }}
           >
             LEAKY
           </span>

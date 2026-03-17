@@ -28,7 +28,7 @@ export default function Icon() {
           {/* Classic teardrop: tip at top, circular bottom */}
           <path
             d="M10 1 C14 6, 18 11, 18 16 A8 8 0 0 1 2 16 C2 11, 6 6, 10 1 Z"
-            fill="#14B8A6"
+            fill="#F0A500"
           />
           {/* Highlight — oval in upper-left of the drop for depth */}
           <ellipse

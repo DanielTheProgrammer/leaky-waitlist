@@ -132,7 +132,7 @@ async function sendConfirmationEmail(
         <!-- Header -->
         <tr>
           <td style="padding:32px 40px 28px;text-align:center;border-bottom:1px solid #1A1A2E;">
-            <span style="font-size:26px;font-weight:900;color:#00CDB4;letter-spacing:0.06em;font-family:Arial,sans-serif;text-transform:uppercase;">LEAKY</span>
+            <span style="font-size:26px;font-weight:900;color:#F0A500;letter-spacing:0.06em;font-family:Arial,sans-serif;text-transform:uppercase;">LEAKY</span>
             <div style="margin-top:6px;font-size:11px;color:#4A4A6A;letter-spacing:0.12em;text-transform:uppercase;">Waitlist Confirmed</div>
           </td>
         </tr>
@@ -140,8 +140,8 @@ async function sendConfirmationEmail(
         <!-- Body -->
         <tr>
           <td style="padding:40px 40px 0;">
-            <div style="display:inline-block;background:rgba(0,205,180,0.10);border:1px solid rgba(0,205,180,0.25);border-radius:100px;padding:6px 16px;margin-bottom:24px;">
-              <span style="font-size:11px;font-weight:700;color:#00CDB4;letter-spacing:0.1em;text-transform:uppercase;">● Spot secured</span>
+            <div style="display:inline-block;background:rgba(240,165,0,0.10);border:1px solid rgba(240,165,0,0.25);border-radius:100px;padding:6px 16px;margin-bottom:24px;">
+              <span style="font-size:11px;font-weight:700;color:#F0A500;letter-spacing:0.1em;text-transform:uppercase;">● Spot secured</span>
             </div>
             <h1 style="margin:0 0 16px;font-size:32px;font-weight:900;color:#EDEDFF;line-height:1.2;letter-spacing:-0.01em;font-family:Arial,sans-serif;">
               You're in, ${firstName}.
@@ -155,19 +155,19 @@ async function sendConfirmationEmail(
         <!-- What happens next -->
         <tr>
           <td style="padding:28px 40px 0;">
-            <div style="background:rgba(0,205,180,0.06);border:1px solid rgba(0,205,180,0.15);border-radius:14px;padding:24px 28px;">
-              <p style="margin:0 0 18px;font-size:11px;font-weight:700;color:#00CDB4;text-transform:uppercase;letter-spacing:0.12em;">What happens next</p>
+            <div style="background:rgba(240,165,0,0.06);border:1px solid rgba(240,165,0,0.15);border-radius:14px;padding:24px 28px;">
+              <p style="margin:0 0 18px;font-size:11px;font-weight:700;color:#F0A500;text-transform:uppercase;letter-spacing:0.12em;">What happens next</p>
               <table width="100%" cellpadding="0" cellspacing="0">
                 <tr><td style="padding:10px 0;border-bottom:1px solid #1A1A2E;">
-                  <span style="font-size:13px;color:#00CDB4;font-weight:800;margin-right:14px;font-family:Arial,sans-serif;">01</span>
+                  <span style="font-size:13px;color:#F0A500;font-weight:800;margin-right:14px;font-family:Arial,sans-serif;">01</span>
                   <span style="font-size:14px;color:#7A7A9E;">We review your application</span>
                 </td></tr>
                 <tr><td style="padding:10px 0;border-bottom:1px solid #1A1A2E;">
-                  <span style="font-size:13px;color:#00CDB4;font-weight:800;margin-right:14px;font-family:Arial,sans-serif;">02</span>
+                  <span style="font-size:13px;color:#F0A500;font-weight:800;margin-right:14px;font-family:Arial,sans-serif;">02</span>
                   <span style="font-size:14px;color:#7A7A9E;">You get an email 48h before your batch opens</span>
                 </td></tr>
                 <tr><td style="padding:10px 0;">
-                  <span style="font-size:13px;color:#00CDB4;font-weight:800;margin-right:14px;font-family:Arial,sans-serif;">03</span>
+                  <span style="font-size:13px;color:#F0A500;font-weight:800;margin-right:14px;font-family:Arial,sans-serif;">03</span>
                   <span style="font-size:14px;color:#7A7A9E;">Set your prices, accept your first request</span>
                 </td></tr>
               </table>

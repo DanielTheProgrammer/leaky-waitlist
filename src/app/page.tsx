@@ -10,7 +10,7 @@ export default function Home() {
         justifyContent: "center",
         position: "relative",
         overflow: "hidden",
-        fontFamily: "'Epilogue', Arial, sans-serif",
+        fontFamily: "var(--font-epilogue-var), 'Epilogue', Arial, sans-serif",
       }}
     >
       {/* Ambient amber glow */}
@@ -39,11 +39,11 @@ export default function Home() {
         {/* Logo */}
         <div
           style={{
-            fontFamily: "'Syne', Arial, sans-serif",
+            fontFamily: "var(--font-syne-var), 'Syne', Arial, sans-serif",
             fontWeight: 800,
             fontSize: "clamp(48px, 10vw, 80px)",
             letterSpacing: "0.25em",
-            color: "#00CDB4",
+            color: "#F0A500",
             marginBottom: "24px",
           }}
         >
@@ -64,7 +64,7 @@ export default function Home() {
         {/* Headline */}
         <h1
           style={{
-            fontFamily: "'Syne', Arial, sans-serif",
+            fontFamily: "var(--font-syne-var), 'Syne', Arial, sans-serif",
             fontWeight: 700,
             fontSize: "clamp(32px, 6vw, 48px)",
             color: "#EDEDFF",

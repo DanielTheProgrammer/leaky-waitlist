@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Outfit, Inter } from "next/font/google";
+import { Syne, Epilogue } from "next/font/google";
 import { Toaster } from "sonner";
 import { Analytics } from "@vercel/analytics/react";
 import Script from "next/script";
@@ -8,17 +8,17 @@ import "./globals.css";
 
 const META_PIXEL_ID = "2978896455833639";
 
-const outfit = Outfit({
+const syne = Syne({
   subsets: ["latin"],
-  variable: "--font-outfit-var",
-  weight: ["400", "500", "600", "700", "800", "900"],
+  variable: "--font-syne-var",
+  weight: ["400", "500", "600", "700", "800"],
   display: "swap",
 });
 
-const inter = Inter({
+const epilogue = Epilogue({
   subsets: ["latin"],
-  variable: "--font-inter-var",
-  weight: ["400", "500", "600"],
+  variable: "--font-epilogue-var",
+  weight: ["300", "400", "500", "600", "700"],
   display: "swap",
 });
 
@@ -49,7 +49,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={`${outfit.variable} ${inter.variable}`}>
+    <html lang="en" className={`${syne.variable} ${epilogue.variable}`}>
       <body>
         {/* ── Meta Pixel base code ─────────────────────────────────────────────
             strategy="afterInteractive" → loads after hydration, never twice.
@@ -84,7 +84,7 @@ export default function RootLayout({
             position="top-center"
             toastOptions={{
               style: {
-                fontFamily: "var(--font-inter-var), Inter, sans-serif",
+                fontFamily: "var(--font-epilogue-var), Epilogue, sans-serif",
                 borderRadius: "12px",
               },
             }}

@@ -51,7 +51,7 @@ export default function PrivacyPage() {
             </p>
             <p style={{ marginTop: "12px" }}>
               For any privacy-related questions, contact us at:{" "}
-              <a href="mailto:privacy@leaky.buzz" style={{ color: "#14B8A6" }}>
+              <a href="mailto:privacy@leaky.buzz" style={{ color: "#F0A500" }}>
                 privacy@leaky.buzz
               </a>
             </p>
@@ -126,7 +126,7 @@ export default function PrivacyPage() {
 
           <Section title="6. Cookies">
             <p>
-              We use a single functional cookie/localStorage key (<code style={{ color: "#14B8A6", background: "rgba(20,184,166,0.1)", padding: "2px 6px", borderRadius: "4px" }}>leaky_cookie_consent</code>) to
+              We use a single functional cookie/localStorage key (<code style={{ color: "#F0A500", background: "rgba(240,165,0,0.1)", padding: "2px 6px", borderRadius: "4px" }}>leaky_cookie_consent</code>) to
               remember that you have acknowledged this notice. No tracking cookies, advertising
               cookies, or analytics cookies are used on this site.
             </p>
@@ -145,7 +145,7 @@ export default function PrivacyPage() {
             </ul>
             <p style={{ marginTop: "12px" }}>
               To exercise any of these rights, email{" "}
-              <a href="mailto:privacy@leaky.buzz" style={{ color: "#14B8A6" }}>
+              <a href="mailto:privacy@leaky.buzz" style={{ color: "#F0A500" }}>
                 privacy@leaky.buzz
               </a>
               . We will respond within 30 days.
@@ -166,7 +166,7 @@ export default function PrivacyPage() {
               This service is not directed at children under 16. We do not knowingly collect data
               from anyone under 16. If you believe we have inadvertently collected data from a minor,
               contact us immediately at{" "}
-              <a href="mailto:privacy@leaky.buzz" style={{ color: "#14B8A6" }}>
+              <a href="mailto:privacy@leaky.buzz" style={{ color: "#F0A500" }}>
                 privacy@leaky.buzz
               </a>
               .
@@ -184,7 +184,7 @@ export default function PrivacyPage() {
           <Section title="11. Contact">
             <p>
               Questions, concerns, or requests related to this policy:{" "}
-              <a href="mailto:privacy@leaky.buzz" style={{ color: "#14B8A6" }}>
+              <a href="mailto:privacy@leaky.buzz" style={{ color: "#F0A500" }}>
                 privacy@leaky.buzz
               </a>
             </p>
@@ -200,7 +200,7 @@ export default function PrivacyPage() {
               alignItems: "center",
               gap: "8px",
               fontSize: "14px",
-              color: "#14B8A6",
+              color: "#F0A500",
               textDecoration: "none",
               fontWeight: "600",
             }}
