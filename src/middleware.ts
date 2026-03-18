@@ -9,6 +9,11 @@ export function middleware(req: NextRequest) {
     }
     return NextResponse.rewrite(url);
   }
+  if (host.startsWith('members.')) {
+    const url = req.nextUrl.clone();
+    if (url.pathname === '/' || url.pathname === '') url.pathname = '/members';
+    return NextResponse.rewrite(url);
+  }
   return NextResponse.next();
 }
 
