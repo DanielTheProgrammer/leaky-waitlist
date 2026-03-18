@@ -103,8 +103,9 @@ async function sendConfirmationEmail(email: string, firstName: string) {
 <html lang="en">
 <head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>You're on the Leaky list</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800;900&family=Epilogue:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Syne:wght@700;800;900&family=Epilogue:wght@400;600;700;800&display=swap');
+</style>
 </head>
 <body style="margin:0;padding:0;background:#07070F;font-family:'Epilogue',Arial,sans-serif;">
   <!-- Preheader -->
@@ -118,7 +119,7 @@ async function sendConfirmationEmail(email: string, firstName: string) {
         <tr>
           <td style="padding:32px 40px 28px;text-align:center;border-bottom:1px solid #1A1A2E;">
             <span style="font-size:26px;font-weight:900;color:#F0A500;letter-spacing:0.06em;font-family:'Syne',Arial,sans-serif;text-transform:uppercase;">LEAKY</span>
-            <div style="margin-top:6px;font-size:11px;color:#4A4A6A;letter-spacing:0.12em;text-transform:uppercase;">Early Access Confirmed</div>
+            <div style="margin-top:6px;font-size:11px;color:#4A4A6A;letter-spacing:0.12em;text-transform:uppercase;font-family:'Epilogue',Arial,sans-serif;">Early Access Confirmed</div>
           </td>
         </tr>
 
@@ -126,12 +127,12 @@ async function sendConfirmationEmail(email: string, firstName: string) {
         <tr>
           <td style="padding:40px 40px 0;">
             <div style="display:inline-block;background:rgba(240,165,0,0.10);border:1px solid rgba(240,165,0,0.25);border-radius:100px;padding:6px 16px;margin-bottom:24px;">
-              <span style="font-size:11px;font-weight:700;color:#F0A500;letter-spacing:0.1em;text-transform:uppercase;">● Spot secured</span>
+              <span style="font-size:11px;font-weight:700;color:#F0A500;letter-spacing:0.1em;text-transform:uppercase;font-family:'Epilogue',Arial,sans-serif;">● Spot secured</span>
             </div>
             <h1 style="margin:0 0 16px;font-size:32px;font-weight:900;color:#EDEDFF;line-height:1.2;letter-spacing:-0.01em;font-family:'Syne',Arial,sans-serif;">
               You're in, ${firstName}.
             </h1>
-            <p style="margin:0;font-size:16px;color:#7A7A9E;line-height:1.75;">
+            <p style="margin:0;font-size:16px;color:#7A7A9E;line-height:1.75;font-family:'Epilogue',Arial,sans-serif;">
               You're now on the early access list for Leaky. We'll let you know as soon as member spots open so you can start making requests.
             </p>
           </td>
@@ -141,19 +142,19 @@ async function sendConfirmationEmail(email: string, firstName: string) {
         <tr>
           <td style="padding:28px 40px 0;">
             <div style="background:rgba(240,165,0,0.06);border:1px solid rgba(240,165,0,0.15);border-radius:14px;padding:24px 28px;">
-              <p style="margin:0 0 18px;font-size:11px;font-weight:700;color:#F0A500;text-transform:uppercase;letter-spacing:0.12em;">What happens next</p>
+              <p style="margin:0 0 18px;font-size:11px;font-weight:700;color:#F0A500;text-transform:uppercase;letter-spacing:0.12em;font-family:'Epilogue',Arial,sans-serif;">What happens next</p>
               <table width="100%" cellpadding="0" cellspacing="0">
                 <tr><td style="padding:10px 0;border-bottom:1px solid #1A1A2E;">
                   <span style="font-size:13px;color:#F0A500;font-weight:800;margin-right:14px;font-family:'Syne',Arial,sans-serif;">01</span>
-                  <span style="font-size:14px;color:#7A7A9E;">We review the early access list</span>
+                  <span style="font-size:14px;color:#7A7A9E;font-family:'Epilogue',Arial,sans-serif;">We review the early access list</span>
                 </td></tr>
                 <tr><td style="padding:10px 0;border-bottom:1px solid #1A1A2E;">
                   <span style="font-size:13px;color:#F0A500;font-weight:800;margin-right:14px;font-family:'Syne',Arial,sans-serif;">02</span>
-                  <span style="font-size:14px;color:#7A7A9E;">You get notified 48h before spots open</span>
+                  <span style="font-size:14px;color:#7A7A9E;font-family:'Epilogue',Arial,sans-serif;">You get notified 48h before spots open</span>
                 </td></tr>
                 <tr><td style="padding:10px 0;">
                   <span style="font-size:13px;color:#F0A500;font-weight:800;margin-right:14px;font-family:'Syne',Arial,sans-serif;">03</span>
-                  <span style="font-size:14px;color:#7A7A9E;">Make your first request to a creator</span>
+                  <span style="font-size:14px;color:#7A7A9E;font-family:'Epilogue',Arial,sans-serif;">Make your first request to a creator</span>
                 </td></tr>
               </table>
             </div>
@@ -164,7 +165,7 @@ async function sendConfirmationEmail(email: string, firstName: string) {
         <tr>
           <td style="padding:32px 40px 40px;text-align:center;">
             <a href="https://leaky.buzz"
-              style="display:inline-block;background:#F0A500;color:#07070F;font-size:15px;font-weight:800;text-decoration:none;padding:14px 40px;border-radius:100px;font-family:Arial,sans-serif;letter-spacing:0.02em;">
+              style="display:inline-block;background:#F0A500;color:#07070F;font-size:15px;font-weight:800;text-decoration:none;padding:14px 40px;border-radius:100px;font-family:'Epilogue',Arial,sans-serif;letter-spacing:0.02em;">
               You're on the list
             </a>
           </td>
@@ -173,7 +174,7 @@ async function sendConfirmationEmail(email: string, firstName: string) {
         <!-- Footer -->
         <tr>
           <td style="padding:24px 40px;border-top:1px solid #1A1A2E;text-align:center;">
-            <p style="margin:0;font-size:12px;color:#4A4A6A;line-height:1.8;">
+            <p style="margin:0;font-size:12px;color:#4A4A6A;line-height:1.8;font-family:'Epilogue',Arial,sans-serif;">
               © 2026 Leaky · welcome@leaky.buzz<br>
               You received this because you joined the member waitlist at leaky.buzz.
             </p>
