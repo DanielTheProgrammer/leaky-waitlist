@@ -5,17 +5,66 @@ import { CheckCircle2 } from "lucide-react";
 
 const ROTATING_WORDS = ["creators", "models", "influencers", "athletes", "actors", "artists", "coaches", "entrepreneurs"];
 
+const ENGAGEMENT_OPTIONS = [
+  { id: "influencers-f", label: "Influencers", gender: "Women" },
+  { id: "influencers-m", label: "Influencers", gender: "Men" },
+  { id: "models-f",      label: "Models",       gender: "Women" },
+  { id: "models-m",      label: "Models",       gender: "Men" },
+  { id: "athletes-f",    label: "Athletes",     gender: "Women" },
+  { id: "athletes-m",    label: "Athletes",     gender: "Men" },
+  { id: "actresses",     label: "Actresses",    gender: "" },
+  { id: "actors",        label: "Actors",       gender: "" },
+  { id: "artists-f",     label: "Artists",      gender: "Women" },
+  { id: "artists-m",     label: "Artists",      gender: "Men" },
+  { id: "coaches-f",     label: "Coaches",      gender: "Women" },
+  { id: "coaches-m",     label: "Coaches",      gender: "Men" },
+  { id: "entrepreneurs-f", label: "Entrepreneurs", gender: "Women" },
+  { id: "entrepreneurs-m", label: "Entrepreneurs", gender: "Men" },
+];
+
+const DISPOSABLE_DOMAINS = new Set([
+  "mailinator.com","guerrillamail.com","temp-mail.org","throwaway.email","yopmail.com",
+  "sharklasers.com","grr.la","guerrillamail.info","spam4.me","dispostable.com",
+  "maildrop.cc","trashmail.com","trashmail.me","trashmail.net","trash-mail.at",
+  "fakeinbox.com","10minutemail.com","tempmail.com","dropmail.me","tempr.email",
+  "discard.email","spamgourmet.com","mailnull.com","spamex.com","binkmail.com",
+  "mt2014.com","nwytg.com","inboxproxy.com","spamfree24.org","mailtemporary.com",
+]);
+
+function isRealName(name: string): boolean {
+  const trimmed = name.trim();
+  if (!/^[a-zA-Z\u00C0-\u024F' -]+$/.test(trimmed)) return false;
+  const words = trimmed.split(/\s+/).filter(Boolean);
+  if (words.length < 2) return false;
+  if (words.some(w => w.length < 2)) return false;
+  const lower = trimmed.toLowerCase();
+  const fakes = ["test", "fake", "asdf", "qwerty", "lorem", "ipsum", "admin", "user", "null", "undefined"];
+  if (fakes.some(f => lower.includes(f))) return false;
+  return true;
+}
+
+function isRealEmail(email: string): boolean {
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) return false;
+  const domain = email.split("@")[1].toLowerCase();
+  if (DISPOSABLE_DOMAINS.has(domain)) return false;
+  const local = email.split("@")[0];
+  if (/^(.)\1{3,}/.test(local)) return false; // e.g. aaaa@
+  return true;
+}
+
 interface FormData {
   fullName: string;
   email: string;
   instagramHandle: string;
   tiktokHandle: string;
+  engagementTarget: string;
 }
 
 interface FormErrors {
   fullName?: string;
   email?: string;
   social?: string;
+  engagementTarget?: string;
 }
 
 export default function MembersPage() {
@@ -24,6 +73,7 @@ export default function MembersPage() {
     email: "",
     instagramHandle: "",
     tiktokHandle: "",
+    engagementTarget: "",
   });
   const [errors, setErrors] = useState<FormErrors>({});
   const [loading, setLoading] = useState(false);
@@ -49,12 +99,21 @@ export default function MembersPage() {
 
   function validate(): boolean {
     const errs: FormErrors = {};
-    if (!form.fullName.trim()) errs.fullName = "Please enter your full name.";
-    if (!form.email.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) {
+    if (!form.fullName.trim()) {
+      errs.fullName = "Please enter your full name.";
+    } else if (!isRealName(form.fullName)) {
+      errs.fullName = "Please enter your real first and last name.";
+    }
+    if (!form.email.trim()) {
       errs.email = "Please enter a valid email address.";
+    } else if (!isRealEmail(form.email)) {
+      errs.email = "Please use a real, permanent email address.";
     }
     if (!form.instagramHandle.trim() && !form.tiktokHandle.trim()) {
       errs.social = "Add at least one — Instagram or TikTok.";
+    }
+    if (!form.engagementTarget) {
+      errs.engagementTarget = "Pick who you want engagement from.";
     }
     setErrors(errs);
     return Object.keys(errs).length === 0;
@@ -73,6 +132,7 @@ export default function MembersPage() {
           email: form.email,
           instagramHandle: form.instagramHandle,
           tiktokHandle: form.tiktokHandle,
+          engagementTarget: form.engagementTarget,
           formLoadedAt: formLoadedAt.current,
           website: "",
           _gotcha: "",
@@ -320,6 +380,49 @@ export default function MembersPage() {
                   </div>
                 </div>
                 {errors.social && <p className="font-epilogue text-xs mt-2" style={{ color: "#FF6B6B" }}>{errors.social}</p>}
+              </div>
+
+              {/* Engagement target */}
+              <div className="mb-7">
+                <label className="font-epilogue block text-xs font-semibold uppercase mb-3" style={{ color: "#5A5A7A", letterSpacing: "0.15em" }}>
+                  Who do you want engagement from?
+                </label>
+                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8 }}>
+                  {ENGAGEMENT_OPTIONS.map(opt => {
+                    const selected = form.engagementTarget === opt.id;
+                    return (
+                      <button
+                        key={opt.id}
+                        type="button"
+                        onClick={() => {
+                          setForm(f => ({ ...f, engagementTarget: opt.id }));
+                          if (errors.engagementTarget) setErrors(err => ({ ...err, engagementTarget: undefined }));
+                        }}
+                        style={{
+                          background: selected ? "rgba(240,165,0,0.10)" : "#07070F",
+                          border: `1px solid ${errors.engagementTarget && !form.engagementTarget ? "#FF6B6B" : selected ? "#F0A500" : "#1C1C2E"}`,
+                          borderRadius: 12,
+                          padding: "10px 12px",
+                          cursor: "pointer",
+                          textAlign: "left",
+                          transition: "border-color 0.15s, background 0.15s",
+                        }}
+                      >
+                        <span className="font-epilogue text-xs font-bold" style={{ color: selected ? "#F0A500" : "#7A7A9E", display: "block", lineHeight: 1.3 }}>
+                          {opt.label}
+                        </span>
+                        {opt.gender && (
+                          <span className="font-epilogue" style={{ fontSize: 10, color: selected ? "rgba(240,165,0,0.6)" : "#3A3A5A", letterSpacing: "0.06em" }}>
+                            {opt.gender}
+                          </span>
+                        )}
+                      </button>
+                    );
+                  })}
+                </div>
+                {errors.engagementTarget && (
+                  <p className="font-epilogue text-xs mt-2" style={{ color: "#FF6B6B" }}>{errors.engagementTarget}</p>
+                )}
               </div>
 
               <button
