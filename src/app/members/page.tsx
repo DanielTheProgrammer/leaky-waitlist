@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from "react";
 import { CheckCircle2 } from "lucide-react";
+import { usePostHog } from "posthog-js/react";
 
 const ROTATING_WORDS = ["creators", "models", "influencers", "athletes", "actors", "artists", "coaches", "entrepreneurs"];
 
@@ -81,9 +82,23 @@ export default function MembersPage() {
   const [rotatingIndex, setRotatingIndex] = useState(0);
   const [wordVisible, setWordVisible] = useState(true);
   const formLoadedAt = useRef<number>(Date.now());
+  const formStarted = useRef(false);
+  const posthog = usePostHog();
 
   useEffect(() => {
     formLoadedAt.current = Date.now();
+    posthog?.capture("members_page_viewed");
+    const startedAt = Date.now();
+    return () => {
+      if (formStarted.current && !success) {
+        posthog?.capture("members_form_abandoned", {
+          seconds_on_page: Math.round((Date.now() - startedAt) / 1000),
+          had_email: !!form.email,
+          had_name: !!form.fullName,
+        });
+      }
+    };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -140,6 +155,11 @@ export default function MembersPage() {
       });
       const data = await res.json();
       if (data.success) {
+        posthog?.capture("members_form_submitted", {
+          engagement_target: form.engagementTarget,
+          has_instagram: !!form.instagramHandle.trim(),
+          has_tiktok: !!form.tiktokHandle.trim(),
+        });
         setSuccess(true);
       } else {
         setErrors({ email: data.error || "Something went wrong." });
@@ -297,7 +317,10 @@ export default function MembersPage() {
                   type="text"
                   placeholder="Your name"
                   value={form.fullName}
-                  onChange={e => setForm(f => ({ ...f, fullName: e.target.value }))}
+                  onChange={e => {
+                    if (!formStarted.current) { formStarted.current = true; posthog?.capture("members_form_started"); }
+                    setForm(f => ({ ...f, fullName: e.target.value }));
+                  }}
                   className="input-field members-input font-epilogue w-full rounded-xl px-4 py-3 text-sm"
                   style={{
                     background: "#07070F",
