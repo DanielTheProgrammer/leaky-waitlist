@@ -384,44 +384,37 @@ export default function MembersPage() {
 
               {/* Engagement target */}
               <div className="mb-7">
-                <label className="font-epilogue block text-xs font-semibold uppercase mb-3" style={{ color: "#5A5A7A", letterSpacing: "0.15em" }}>
+                <label className="font-epilogue block text-xs font-semibold uppercase tracking-widest mb-2.5" style={{ color: "#5A5A7A", letterSpacing: "0.15em" }}>
                   Who do you want engagement from?
                 </label>
-                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8 }}>
-                  {ENGAGEMENT_OPTIONS.map(opt => {
-                    const selected = form.engagementTarget === opt.id;
-                    return (
-                      <button
-                        key={opt.id}
-                        type="button"
-                        onClick={() => {
-                          setForm(f => ({ ...f, engagementTarget: opt.id }));
-                          if (errors.engagementTarget) setErrors(err => ({ ...err, engagementTarget: undefined }));
-                        }}
-                        style={{
-                          background: selected ? "rgba(240,165,0,0.10)" : "#07070F",
-                          border: `1px solid ${errors.engagementTarget && !form.engagementTarget ? "#FF6B6B" : selected ? "#F0A500" : "#1C1C2E"}`,
-                          borderRadius: 12,
-                          padding: "10px 12px",
-                          cursor: "pointer",
-                          textAlign: "left",
-                          transition: "border-color 0.15s, background 0.15s",
-                        }}
-                      >
-                        <span className="font-epilogue text-xs font-bold" style={{ color: selected ? "#F0A500" : "#7A7A9E", display: "block", lineHeight: 1.3 }}>
-                          {opt.label}
-                        </span>
-                        {opt.gender && (
-                          <span className="font-epilogue" style={{ fontSize: 10, color: selected ? "rgba(240,165,0,0.6)" : "#3A3A5A", letterSpacing: "0.06em" }}>
-                            {opt.gender}
-                          </span>
-                        )}
-                      </button>
-                    );
-                  })}
-                </div>
+                <select
+                  value={form.engagementTarget}
+                  onChange={e => {
+                    setForm(f => ({ ...f, engagementTarget: e.target.value }));
+                    if (errors.engagementTarget) setErrors(err => ({ ...err, engagementTarget: undefined }));
+                  }}
+                  className="font-epilogue w-full rounded-xl px-4 py-3 text-sm"
+                  style={{
+                    background: "#07070F",
+                    border: `1px solid ${errors.engagementTarget ? "#FF6B6B" : "#1C1C2E"}`,
+                    color: form.engagementTarget ? "#EDEDFF" : "#2E2E48",
+                    fontFamily: "var(--font-epilogue)",
+                    appearance: "none",
+                    backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%234A4A6A' d='M6 8L1 3h10z'/%3E%3C/svg%3E")`,
+                    backgroundRepeat: "no-repeat",
+                    backgroundPosition: "right 14px center",
+                    cursor: "pointer",
+                  }}
+                >
+                  <option value="" disabled style={{ color: "#2E2E48" }}>Select a category…</option>
+                  {ENGAGEMENT_OPTIONS.map(opt => (
+                    <option key={opt.id} value={opt.id} style={{ background: "#0D0D1A", color: "#EDEDFF" }}>
+                      {opt.gender ? `${opt.label} — ${opt.gender}` : opt.label}
+                    </option>
+                  ))}
+                </select>
                 {errors.engagementTarget && (
-                  <p className="font-epilogue text-xs mt-2" style={{ color: "#FF6B6B" }}>{errors.engagementTarget}</p>
+                  <p className="font-epilogue text-xs mt-1.5" style={{ color: "#FF6B6B" }}>{errors.engagementTarget}</p>
                 )}
               </div>
 
