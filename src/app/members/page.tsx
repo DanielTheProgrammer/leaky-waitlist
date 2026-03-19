@@ -131,7 +131,9 @@ export default function MembersPage() {
       errs.engagementTarget = "Pick who you want engagement from.";
     }
     setErrors(errs);
-    return Object.keys(errs).length === 0;
+    const passed = Object.keys(errs).length === 0;
+    if (!passed) posthog?.capture("members_validation_failed", { failed_fields: Object.keys(errs) });
+    return passed;
   }
 
   async function handleSubmit(e: React.FormEvent) {
@@ -321,6 +323,7 @@ export default function MembersPage() {
                     if (!formStarted.current) { formStarted.current = true; posthog?.capture("members_form_started"); }
                     setForm(f => ({ ...f, fullName: e.target.value }));
                   }}
+                  onBlur={e => { if (e.target.value.trim()) posthog?.capture("members_field_completed", { field: "fullName" }); }}
                   className="input-field members-input font-epilogue w-full rounded-xl px-4 py-3 text-sm"
                   style={{
                     background: "#07070F",
@@ -343,6 +346,7 @@ export default function MembersPage() {
                   placeholder="you@example.com"
                   value={form.email}
                   onChange={e => setForm(f => ({ ...f, email: e.target.value }))}
+                  onBlur={e => { if (e.target.value.trim()) posthog?.capture("members_field_completed", { field: "email" }); }}
                   className="input-field members-input font-epilogue w-full rounded-xl px-4 py-3 text-sm"
                   style={{
                     background: "#07070F",
@@ -371,6 +375,7 @@ export default function MembersPage() {
                         setForm(f => ({ ...f, instagramHandle: e.target.value }));
                         if (errors.social) setErrors(err => ({ ...err, social: undefined }));
                       }}
+                      onBlur={e => { if (e.target.value.trim()) posthog?.capture("members_field_completed", { field: "instagram" }); }}
                       className="input-field members-input font-epilogue flex-1 rounded-xl px-4 py-3 text-sm"
                       style={{
                         background: "#07070F",
@@ -391,6 +396,7 @@ export default function MembersPage() {
                         setForm(f => ({ ...f, tiktokHandle: e.target.value }));
                         if (errors.social) setErrors(err => ({ ...err, social: undefined }));
                       }}
+                      onBlur={e => { if (e.target.value.trim()) posthog?.capture("members_field_completed", { field: "tiktok" }); }}
                       className="input-field members-input font-epilogue flex-1 rounded-xl px-4 py-3 text-sm"
                       style={{
                         background: "#07070F",
@@ -415,6 +421,7 @@ export default function MembersPage() {
                   onChange={e => {
                     setForm(f => ({ ...f, engagementTarget: e.target.value }));
                     if (errors.engagementTarget) setErrors(err => ({ ...err, engagementTarget: undefined }));
+                    if (e.target.value) posthog?.capture("members_engagement_target_selected", { target: e.target.value });
                   }}
                   className="font-epilogue w-full rounded-xl px-4 py-3 text-sm"
                   style={{
